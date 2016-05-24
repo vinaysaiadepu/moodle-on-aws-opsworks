@@ -1,1 +1,1 @@
-name "opsworks-moodle"
+name "opsworks_moodle"
