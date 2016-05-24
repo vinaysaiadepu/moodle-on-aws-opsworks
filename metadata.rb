@@ -1,1 +1,1 @@
-name "cookbookdemo"
+name "opsworks-moodle"

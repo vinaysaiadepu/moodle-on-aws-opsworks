@@ -1,9 +1,15 @@
-Chef::Log.info("********* HELLO WORLD! *************")
+include_recipe 'apache'
 
-Chef::Log.info("********* Cloning app from github *************")
+# Cloning app from github - this will only grab the first app and ignore all others.
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
 git app_path do
 	repository app["app_source"]["url"]
 	revision app["app_source"]["revision"]
+	depth 1
+end
+
+# Symlink app to /var/www/html
+link '/var/www/html' do
+	to app_path
 end
