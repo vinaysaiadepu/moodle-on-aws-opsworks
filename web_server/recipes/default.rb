@@ -1,4 +1,4 @@
-include_recipe 'opsworks_moodle::apache'
+include_recipe 'apache'
 
 # Cloning app from github - this will only grab the first app and ignore all others.
 app = search(:aws_opsworks_app).first
