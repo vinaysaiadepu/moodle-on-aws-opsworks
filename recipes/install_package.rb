@@ -1,3 +1,10 @@
-package "Install Emacs" do
-	package_name "emacs"
+packages = [
+	'httpd24',
+	'php56'
+]
+
+packages.each do |pkg|
+	package pkg do
+		action :install
+	end
 end
