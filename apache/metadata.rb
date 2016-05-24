@@ -1,2 +1,2 @@
 name "apache"
-recipe "apache"
+recipe "apache", "Install Apache and PHP"
