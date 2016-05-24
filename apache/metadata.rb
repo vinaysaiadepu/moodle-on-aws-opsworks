@@ -1,1 +1,2 @@
 name "apache"
+recipe "apache"
