@@ -1,0 +1,31 @@
+<?php  // Moodle configuration file
+<!-- require_once('opsworks.php');
+$ops = new OpsWorks(); -->
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+$CFG->dbtype    = 'mysqli';
+$CFG->dblibrary = 'native';
+<!-- $CFG->dbhost    = $ops->db->host;
+$CFG->dbname    = $ops->db->database;
+$CFG->dbuser    = $ops->db->username;
+$CFG->dbpass    = $ops->db->password; -->
+$CFG->prefix    = 'mdl_';
+$CFG->dboptions = array (
+  'dbpersist' => 0,
+  'dbport' => '',
+  'dbsocket' => '',
+);
+$CFG->wwwroot   = 'http://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
+$CFG->dataroot  = '/mnt/nfs/moodledata';
+$CFG->localcachedir = '/dev/shm/moodledata/localcache';
+$CFG->admin     = 'admin';
+<!-- $CFG->session_handler_class = '\core\session\memcached';
+$CFG->session_memcached_save_path = 'memcached1:11211';
+$CFG->session_memcached_prefix = 'memc.sess.key.';
+$CFG->session_memcached_acquire_lock_timeout = 120;
+$CFG->session_memcached_lock_expire = 7200;       // Ignored if memcached extension <= 2.1.0 -->
+$CFG->directorypermissions = 0777;
+require_once(dirname(__FILE__) . '/lib/setup.php');
+// There is no php closing tag in this file,
+// it is intentional because it prevents trailing whitespace problems!

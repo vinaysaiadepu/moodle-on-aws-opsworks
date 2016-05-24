@@ -1,6 +1,12 @@
 packages = [
 	'httpd24',
-	'php56'
+	'php56',
+	'php56-opcache',
+	'php56-mysqlnd',
+	'php56-xmlrpc',
+	'php56-intl',
+	'php56-soap',
+	'mysql56'
 ]
 
 packages.each do |pkg|

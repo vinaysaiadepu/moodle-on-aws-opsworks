@@ -16,3 +16,12 @@ end
 link '/var/www/html' do
 	to app_path
 end
+
+# Add Moodle config.php file
+template 'config.php' do
+	path "#{app_path}/config.php"
+	source "config.php.erb"
+	owner "root"
+	group "root"
+	mode 775
+end
