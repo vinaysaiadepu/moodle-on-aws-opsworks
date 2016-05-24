@@ -10,6 +10,9 @@ git app_path do
 end
 
 # Symlink app to /var/www/html
+directory '/var/www/html' do
+	action :delete
+end
 link '/var/www/html' do
 	to app_path
 end
