@@ -12,6 +12,7 @@ end
 # Symlink app to /var/www/html
 directory '/var/www/html' do
 	action :delete
+	ignore_failure true
 end
 link '/var/www/html' do
 	to app_path
