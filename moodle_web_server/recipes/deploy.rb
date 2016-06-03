@@ -25,7 +25,7 @@ template 'config.php' do
 	owner "apache"
 	group "ec2-user"
 	mode 770
-	variables (
+	variables(
 		:db_name => app["data_sources"]["database_name"]
 	)
 end
