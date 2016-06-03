@@ -9,7 +9,7 @@ $CFG = new stdClass();
 $CFG->dbtype    = 'mysqli';
 $CFG->dblibrary = 'native';
 $CFG->dbhost    = $ops->db_host;
-$CFG->dbname    = $ops->db_name;
+$CFG->dbname    = <%= @db_name %>;
 $CFG->dbuser    = $ops->db_user;
 $CFG->dbpass    = $ops->db_pass;
 $CFG->prefix    = 'mdl_';
