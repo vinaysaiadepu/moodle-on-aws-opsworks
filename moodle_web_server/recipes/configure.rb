@@ -21,18 +21,19 @@ end
 
 # Mount Moodledata NFS store
 
-directory "/mnt/nfs" do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
+# directory "/mnt/nfs" do
+#   owner 'root'
+#   group 'root'
+#   mode '0755'
+#   action :create
+# end
 
 directory "/mnt/nfs/moodledata" do
   owner 'root'
   group 'root'
   mode '0755'
   action :create
+  recursive true
 end
 
 moodledata = search(:aws_opsworks_instance, "role:moodle-data-server AND status:online").first
