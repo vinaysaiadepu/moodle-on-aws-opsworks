@@ -26,6 +26,6 @@ template 'config.php' do
 	group "ec2-user"
 	mode 770
 	variables(
-		:db_name => app["data_sources"]["database_name"]
+		:db_name => app["data_sources"][0]["database_name"]
 	)
 end
