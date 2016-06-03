@@ -19,17 +19,10 @@ link '/var/www/html' do
 end
 
 # Add Moodle config.php file
-db = search(:aws_opsworks_rds_db_instance, "*:*").first
 template 'config.php' do
 	path "#{app_path}/config.php"
 	source "config.php.erb"
 	owner "root"
 	group "root"
 	mode 775
-	variables(
-		:db_host => db["address"],
-		:db_name => db["db_instance_identifier"],
-		:db_user => db["db_user"],
-		:db_pass => db["db_password"]
-	)
 end

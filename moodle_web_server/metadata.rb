@@ -1,5 +1,5 @@
-name "moodle_web_server"
+# Main Moodle HTTP Front-end Server Config
 
-recipe "moodle_web_server", "Main Moodle HTTP Front-end Server Config"
+name "moodle_web_server"
 
 depends "apache"

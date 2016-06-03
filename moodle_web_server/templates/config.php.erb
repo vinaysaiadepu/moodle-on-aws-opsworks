@@ -1,14 +1,17 @@
 <?php  // Moodle configuration file
 
+require_once('/srv/opsworks.php');
+$ops = new Opsworks();
+
 unset($CFG);
 global $CFG;
 $CFG = new stdClass();
 $CFG->dbtype    = 'mysqli';
 $CFG->dblibrary = 'native';
-$CFG->dbhost    = <%= @db_host %>;
-$CFG->dbname    = <%= @db_name %>;
-$CFG->dbuser    = <%= @db_user %>;
-$CFG->dbpass    = <%= @db_pass %>;
+$CFG->dbhost    = $ops->db_host;
+$CFG->dbname    = $ops->db_name;
+$CFG->dbuser    = $ops->db_user;
+$CFG->dbpass    = $ops->db_pass;
 $CFG->prefix    = 'mdl_';
 $CFG->dboptions = array (
   'dbpersist' => 0,
@@ -21,7 +24,7 @@ $CFG->localcachedir = '/dev/shm/moodledata/localcache';
 $CFG->admin     = 'admin';
 
 $CFG->session_handler_class = '\core\session\memcached';
-$CFG->session_memcached_save_path = '<%= @memcached_ip =>:11211';
+$CFG->session_memcached_save_path = $ops->memcached_ip . ':11211';
 $CFG->session_memcached_prefix = 'memc.sess.key.';
 $CFG->session_memcached_acquire_lock_timeout = 120;
 $CFG->session_memcached_lock_expire = 7200;       // Ignored if memcached extension <= 2.1.0

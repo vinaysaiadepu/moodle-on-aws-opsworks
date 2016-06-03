@@ -1,3 +1,5 @@
+# Create NFS share to be available for other servers
+
 include_recipe "nfs"
 
 directory "/vol/moodledata" do
@@ -14,3 +16,8 @@ end
 service "nfs" do
   action :start
 end
+
+
+# TODO: If /vol/moodledata/filedir is empty, restore it from backup from Amazon S3
+
+# if Dir["/vol/moodledata/filedir"]
