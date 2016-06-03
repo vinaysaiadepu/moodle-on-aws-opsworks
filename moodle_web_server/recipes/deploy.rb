@@ -22,7 +22,10 @@ end
 template 'config.php' do
 	path "#{app_path}/config.php"
 	source "config.php.erb"
-	owner "root"
-	group "root"
-	mode 775
+	owner "apache"
+	group "ec2-user"
+	mode 770
+	variables (
+		:db_name => app["data_sources"]["database_name"]
+	)
 end
