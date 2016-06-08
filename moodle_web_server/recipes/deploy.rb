@@ -1,5 +1,3 @@
-include_recipe 'apache::default'
-
 # Cloning app from github - this will only grab the first app and ignore all others. This first/only app should be a Moodle github repo
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
@@ -28,4 +26,13 @@ template 'config.php' do
 	variables(
 		:db_name => app["data_sources"][0]["database_name"]
 	)
+end
+
+# Add PHP file for load balancer check
+template 'aws-up-check.php'
+	path "#{app_path}/aws-up-check.php"
+	sources "aws-up-check.php"
+	owner "apache"
+	group "ec2-user"
+	mode 770
 end
