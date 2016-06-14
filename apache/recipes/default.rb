@@ -23,14 +23,14 @@ service "httpd" do
 end
 
 # directory "/etc/httpd/sites-available" do
-# 	mode 0755
+# 	mode '0755'
 # 	owner 'root'
 # 	group 'root'
 # 	action :create
 # end
 
 # directory "/etc/httpd/sites-enabled" do
-# 	mode 0755
+# 	mode '0755'
 # 	owner 'root'
 # 	group 'root'
 # 	action :create

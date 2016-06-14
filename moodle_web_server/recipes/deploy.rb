@@ -22,7 +22,7 @@ template 'config.php' do
 	source "config.php.erb"
 	owner "apache"
 	group "ec2-user"
-	mode 770
+	mode '0770'
 	variables(
 		:db_name => app["data_sources"][0]["database_name"]
 	)
@@ -34,5 +34,5 @@ template 'aws-up-check.php' do
 	source "aws-up-check.php.erb"
 	owner "apache"
 	group "ec2-user"
-	mode 770
+	mode '0770'
 end
