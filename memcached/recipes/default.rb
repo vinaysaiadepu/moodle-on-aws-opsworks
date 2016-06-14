@@ -1,6 +1,6 @@
 # Installs/runs memcached
 
-package 'memached' do
+package 'memcached' do
 	action :install
 end
 
