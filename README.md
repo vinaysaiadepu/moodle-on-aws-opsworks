@@ -86,6 +86,7 @@ Security:
 - moodle-opsworks-webserver
 
 Recipes:
+- Setup: apache::default
 - Configure: moodle_web_server::configure
 - Deploy: moodle_web_server::deploy
 
@@ -99,7 +100,7 @@ Security:
 - moodle-opsworks-all
 
 Recipes:
-- Configure: moodle_data_server
+- Configure: moodle_data_server::default
 
 Network:
 - Public IP Address: Yes
@@ -120,21 +121,33 @@ Recipes:
 Network:
 - Public IP Address: Yes
 
-### Layer: RDS
+#### Layer: RDS
 
 - Instance/User/Password: [as specified when setting up RDS above]
 
+#### App
+
+You have to add an "App". There's only one: Moodle
+
+Apps->Add App
+- Name: Moodle
+- Data source type: RDS
+-- Database instance/name: as above
+- Application Source:
+-- Type: Git
+-- URL: https://github.com/moodle/moodle.git
+-- Branch: MOODLE_31_STABLE (or latest)
 
 
 ## Todo:
 
 high:
-- elb
 - get it more working...
 
 med:
 - s3 backup/restore
 - cloudformation script for all this
+- code to check that app exists
 
 low:
 - moodle_web_server: fix deploy script so that it doesn't need to symlink /var/www/html

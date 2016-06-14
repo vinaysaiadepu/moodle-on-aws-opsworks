@@ -1,8 +1,3 @@
-# Install Apache, PHP, and a bunch of PHP addons
-
-include_recipe 'apache::default'
-
-
 # Add /srv/opsworks.php file - stores info that Moodle needs to know about other AWS resources
 
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
@@ -23,7 +18,7 @@ template 'opsworks.php' do
 end
 
 
-# Mount Moodledata NFS folder
+# Create and mount Moodledata NFS folder
 
 directory "/mnt/nfs/moodledata" do
   owner 'apache'
