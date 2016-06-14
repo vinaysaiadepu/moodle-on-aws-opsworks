@@ -3,6 +3,8 @@
 include_recipe "nfs"
 
 directory "/vol/moodledata" do
+  owner 48
+  group 48
   mode '0777'
 end
 

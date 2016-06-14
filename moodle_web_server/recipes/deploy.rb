@@ -29,7 +29,7 @@ template 'config.php' do
 end
 
 # Add PHP file for load balancer check
-template 'aws-up-check.php'
+template 'aws-up-check.php' do
 	path "#{app_path}/aws-up-check.php"
 	sources "aws-up-check.php"
 	owner "apache"

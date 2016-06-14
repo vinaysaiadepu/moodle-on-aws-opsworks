@@ -9,20 +9,64 @@ Attempting to setup Moodle server on Opsworks
 
 ### Pre-req
 
+#### RDS (Database)
+
+AWS->Services->RDS
+
+Set up a t2.micro or t2.small RDS instance.
+- Step 1: MySQL
+- Step 2: Production MySQL or Dev (up to you)
+- Step 3: 
+-- DB Engine Version 5.7.latest
+-- DB Instance Class: t2.micro will do for a small setup
+-- Multi-AZ: Up to you
+-- Storage type: SSD either
+-- Allocated storage: At least 50-100GB
+-- DB instance identifier etc: "Moodle" / Up to you, but note the details you enter
+- Step 4:
+-- VPC: Same as all others in this setup
+-- Security group: moodle-opsworks-all
+-- Parameter group: "Moodle"
+
+Note: If you used triggers in your Moodle database, you will need to create an RDS 'parameter group' and set your RDS instance to use it
+- Parameter groups -> new 
+-- Family: mysql5.7
+-- Name: "Moodle"
+-- Edit parameters
+-- log_bin_trust_function_creators => 1
+
+#### ELB (Load balancer)
+
+AWS->Services->EC2->Load balancers
+
+Create load balancer
+- Load balancer name: Moodle
+- Listener config:
+-- HTTP80->HTTP80
+-- HTTPS443->HTTP80
+- Security groups:
+-- Default VPC security group (?)
+-- moodle-opsworks-all
+-- moodle-opsworks-webserver
+- Security settings
+-- Either upload your SSL cert, or create one with ACM - it's easy
+- Health check:
+-- Ping path: /aws-up-check.php
+- Instances: none yet
+
+
 #### EC2 Security Groups: 
 
+Create the following security groups in your target region:
+
 - moodle-opsworks-all
--- ssh from your IP
+-- ssh: from: your IP
+-- all traffic: from security group: moodle-opsworks-all (this SG)
+
 - moodle-opsworks-webserver
--- http/https from 0.0.0.0
+-- http: from 0.0.0.0
+-- https: from 0.0.0.0
 
-#### RDS
-
-Set up a t2.micro or small RDS instance.
-- MySQL 5.7
-- VPC: Same as all others in this setup
-- Security group: defaults + moodle-opsworks-all
-- Parameter groups -> new -> name = "moodle" -> log_bin_trust_function_creators => 1
 
 ### Opsworks 
 
@@ -37,18 +81,22 @@ Set up a t2.micro or small RDS instance.
 
 #### Layer: moodle-web-server
 
+Security:
+- moodle-opsworks-all
+- moodle-opsworks-webserver
+
 Recipes:
 - Configure: moodle_web_server::configure
 - Deploy: moodle_web_server::deploy
 
 Network:
+- Elastic load balancer: Moodle
 - Public IP Address: Yes
 
-Securiy:
-- moodle-opsworks-all
-- moodle-opsworks-webserver
-
 #### Layer: moodle-data-server
+
+Security:
+- moodle-opsworks-all
 
 Recipes:
 - Configure: moodle_data_server
@@ -56,10 +104,15 @@ Recipes:
 Network:
 - Public IP Address: Yes
 
-Securiy:
-- moodle-opsworks-all
+EBS Volumes:
+- Mount point: /vol/moodledata
+- Size total: 100GB (or whatever's approps)
+- Volume type: General Purpose SSD
 
 #### Layer: memcached
+
+Security:
+- moodle-opsworks-all
 
 Recipes:
 - Configure: memcached
@@ -67,8 +120,10 @@ Recipes:
 Network:
 - Public IP Address: Yes
 
-Securiy:
-- moodle-opsworks-all
+### Layer: RDS
+
+- Instance/User/Password: [as specified when setting up RDS above]
+
 
 
 ## Todo:
