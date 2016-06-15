@@ -34,5 +34,5 @@ mount '/mnt/nfs/moodledata' do
   device moodledata['private_ip'] + ':/vol/moodledata'
   fstype 'nfs'
   options 'rw'
-  # action [:mount, :enable] # uncommenting this will force unmount+remount
+  action [:mount, :enable] # force unmount+remount - needed in case moodledata server goes down and is recreated
 end

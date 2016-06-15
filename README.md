@@ -138,6 +138,18 @@ Apps->Add App
 -- URL: https://github.com/moodle/moodle.git
 -- Branch: MOODLE_31_STABLE (or latest)
 
+### Optional
+
+#### Backup Moodledata to S3:
+
+To do this, you'll need to 
+- create an IAM policy (that gives permission to access an s3 bucket), 
+- create IAM role (that gives permission for EC2 instances to use the IAM policy),
+- add json to the opsworks stack that includes:
+-- the IAM role 
+-- the S3 bucket name
+-- the S3 bucket region? (not sure if needed)
+- add the backup lifecycle event to the moodledata layer
 
 ## Todo:
 
@@ -145,9 +157,10 @@ high:
 - get it more working...
 
 med:
-- s3 backup/restore
 - cloudformation script for all this
 - code to check that app exists
+- s3 backup/restore
+- add detail to the "Backup Moodledata to S3" section of this doc
 
 low:
 - moodle_web_server: fix deploy script so that it doesn't need to symlink /var/www/html
