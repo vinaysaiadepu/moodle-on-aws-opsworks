@@ -2,7 +2,10 @@
 
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
 moodledata = search(:aws_opsworks_instance, "role:moodle-data-server AND status:online").first
-#memcached = search(:aws_opsworks_instance, "role:memcached AND status:online").first
+memcached = search(:aws_opsworks_instance, "role:memcached AND status:online").first
+if memcached.nil?
+	memcached = moodledata
+end
 
 template 'opsworks.php' do
 	path '/srv/opsworks.php'
@@ -14,7 +17,7 @@ template 'opsworks.php' do
 		:db_host		=> db['address'],
 		:db_user		=> db['db_user'],
 		:db_pass		=> db['db_password'],
-		:memcached_ip	=> moodledata['private_ip']
+		:memcached_ip	=> memcached['private_ip']
 	)
 end
 
@@ -28,7 +31,6 @@ directory '/mnt/nfs/moodledata' do
   action :create
   recursive true
 end
-
 
 mount '/mnt/nfs/moodledata' do
   device moodledata['private_ip'] + ':/vol/moodledata'

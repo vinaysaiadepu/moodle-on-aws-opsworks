@@ -170,13 +170,6 @@ low:
 
 ## Notes for playing around with Chef local in SSH on individual machines
 
-chef-client -z whatever.rb
+chef-apply whatever.rb
 
-or
-
-sudo mkdir /var/chef/cookbooks/test
-sudo mkdir /var/chef/cookbooks/test/recipes
-sudo echo "" > /var/chef/cookbooks/test/recipes/default.rb
-sudo nano /var/chef/cookbooks/test/recipes/default.rb
---put some chef script in now--
-sudo chef-client -o test 	# add -z switch to use local chef repo instead of contacting opsworks server
+knife search -c /var/chef/runs/71acfdb8-4900-4ec7-98f2-7f3cc17f4cb2/client.rb node 'role:moodle-web-server'
