@@ -159,6 +159,9 @@ high:
 med:
 - cloudformation script for all this
 - code to check that app exists
+- code to check that memcached/etc exists
+-- 16>>         :memcached_ip   => memcached['private_ip']
+-- undefined method `[]' for nil:NilClass
 - s3 backup/restore
 - add detail to the "Backup Moodledata to S3" section of this doc
 
@@ -167,9 +170,13 @@ low:
 
 ## Notes for playing around with Chef local in SSH on individual machines
 
+chef-client -z whatever.rb
+
+or
+
 sudo mkdir /var/chef/cookbooks/test
 sudo mkdir /var/chef/cookbooks/test/recipes
 sudo echo "" > /var/chef/cookbooks/test/recipes/default.rb
 sudo nano /var/chef/cookbooks/test/recipes/default.rb
 --put some chef script in now--
-sudo chef-client -z -o test
+sudo chef-client -o test 	# add -z switch to use local chef repo instead of contacting opsworks server
