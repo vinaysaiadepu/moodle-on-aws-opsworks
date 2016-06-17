@@ -138,6 +138,9 @@ Apps->Add App
 -- URL: https://github.com/moodle/moodle.git
 -- Branch: MOODLE_31_STABLE (or latest)
 
+#### Instances
+
+
 ### Optional
 
 #### Backup Moodledata to S3:
@@ -146,10 +149,10 @@ To do this, you'll need to
 - create an IAM policy (that gives permission to access an s3 bucket), 
 - create IAM role (that gives permission for EC2 instances to use the IAM policy),
 - add json to the opsworks stack that includes:
--- the IAM role 
 -- the S3 bucket name
 -- the S3 bucket region? (not sure if needed)
 - add the backup lifecycle event to the moodledata layer
+- add the IAM instance profile to moodledata and web layers
 
 ## Todo:
 
@@ -162,6 +165,8 @@ med:
 - code to check that memcached/etc exists
 -- 16>>         :memcached_ip   => memcached['private_ip']
 -- undefined method `[]' for nil:NilClass
+- code to check that mount is still right? depends if remounting is working
+-- if File.read(/procsomething).include?(ip:/nfssomething)
 - s3 backup/restore
 - add detail to the "Backup Moodledata to S3" section of this doc
 

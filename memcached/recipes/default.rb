@@ -5,5 +5,5 @@ package 'memcached' do
 end
 
 service 'memcached' do
-	action :start
+	action :enable
 end

@@ -11,6 +11,6 @@ template '/etc/cron.d/hourly-moodlebackup.cron' do
 	source 'hourly-moodlebackup.cron'
 end
 
-service 'crond' do
-	action :restart
-end
+# service 'crond' do
+# 	action :restart
+# end

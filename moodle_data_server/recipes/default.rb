@@ -16,7 +16,7 @@ nfs_export "/vol/moodledata" do
 end
 
 service "nfs" do
-  action :start
+  action :enable
 end
 
 

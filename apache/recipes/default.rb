@@ -19,8 +19,10 @@ packages.each do |pkg|
 end
 
 service "httpd" do
-	action :start
+	action :enable
 end
+
+
 
 # directory "/etc/httpd/sites-available" do
 # 	mode '0755'
