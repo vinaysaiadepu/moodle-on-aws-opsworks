@@ -14,6 +14,25 @@ This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS
 
 ### Pre-req
 
+#### VPC (Virtual network)
+
+##### Setup
+##### 1. AWS Console > VPC > Start VPC Wizard
+##### 2. Select >
+IP CIDR block:10.10.0.0/16
+VPC name: ITM-Moodle-ops
+
+Public subnet:*10.10.0.0/24
+Subnet name:Public subnet
+Subnet:Moodle Public subnet
+Enable DNS hostnames:*Tes
+Hardware tenancy: Default
+Enable ClassicLink:*no
+##### 3.Navigate to Subnets in VPC Dashboard
+##### 4. Create Subnet
+Name: Moodle Private Subnet
+CIDR: 10.10.20.0/24
+
 #### RDS (Database)
 
 AWS->Services->RDS
@@ -44,8 +63,10 @@ Note: If you used triggers in your Moodle database, you will need to create an R
 
 AWS->Services->EC2->Load balancers
 
+
 Create load balancer
-- Load balancer name: Moodle
+- Load balancer name: ITM-Moodle-ops
+- Create LB Inside : ITM-Moodle-ops (or VPC name created above)
 - Listener config:
 -- HTTP80->HTTP80
 -- HTTPS443->HTTP80
@@ -58,16 +79,16 @@ Create load balancer
 - Health check:
 -- Ping path: /aws-up-check.php
 - Instances: none yet
-
+#####- Other Options: Default
 
 #### EFS
 
 Create an EFS volume. No special configuration required. Note the filesystem ID.
-
+Subnet: Moodle Private Subnet
 
 #### EC2 Security Groups: 
 
-Create the following security groups in your target region:
+Create the following security groups in your target region and VPC:
 
 - moodle-opsworks-all
 -- ssh: from: your IP
@@ -81,12 +102,16 @@ Create the following security groups in your target region:
 ### Opsworks 
 
 #### Stack
-
+- Stack name : ITM-Moodle-ops
+- Region: Same as VPC/EFS/RDS
+- VPC: ITM-Moodle-ops
+- Default subnet Moodle Private Subnet
 - Default operating system: Amazon Linux [latest]
 - Default SSH key: [put in one of your EC2 SSH keys here, or you'll regret it when you go to troubleshoot]
 - Chef version: 12
 - Use custom Chef cookbooks: yes
-- Repo: https://github.com/jamesoflol/opsworks-demo.git
+- Repo: https://github.com/ITMasters/moodle-on-aws-opsworks.git
+- Create a new public/private key rsa pair, add pub key to deploy tab on github add private as Repository SSH Key
 - Use OpsWorks security groups: no
 - Custom JSON: (example below. s3 backup optional, EFS_ID required)
 {
