@@ -22,7 +22,7 @@ end
 
 # Create and mount Moodledata NFS folder
 
-directory '/mnt/nfs/moodledata' do
+directory '/mnt/nfs' do
   owner 'apache'
   group 'ec2-user'
   mode '0770'
@@ -30,9 +30,9 @@ directory '/mnt/nfs/moodledata' do
   recursive true
 end
 
-mount '/mnt/nfs/moodledata' do
-  device "#{thisinstance['availability_zone']}.#{node['EFS_ID']}.efs.#{stack['region']}.amazonaws.com:/moodledata"
-  fstype 'nfs'
-  options 'rw'
+mount '/mnt/nfs' do
+  device "#{thisinstance['availability_zone']}.#{node['EFS_ID']}.efs.#{stack['region']}.amazonaws.com:/"
+  fstype 'nfs4'
+  options 'rw','nfsvers=4.1'
   # action [:mount, :enable] # force unmount+remount - needed in case NFS server goes down and changes address
 end
