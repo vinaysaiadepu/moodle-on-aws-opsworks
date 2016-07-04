@@ -1,11 +1,9 @@
 # Add /srv/opsworks.php file - stores info that Moodle needs to know about other AWS resources
 
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
-moodledata = search(:aws_opsworks_instance, "role:moodle-data-server AND status:online").first
-memcached = search(:aws_opsworks_instance, "role:memcached AND status:online").first
-if memcached.nil?
-	memcached = moodledata
-end
+thisinstance = search(:aws_opsworks_instance, "self:true").first
+memcached = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").first
+stack = search(:aws_opsworks_stack).first
 
 template 'opsworks.php' do
 	path '/srv/opsworks.php'
@@ -33,8 +31,8 @@ directory '/mnt/nfs/moodledata' do
 end
 
 mount '/mnt/nfs/moodledata' do
-  device moodledata['private_ip'] + ':/vol/moodledata'
+  device "#{thisinstance['availability_zone']}.#{node['EFS_ID']}.efs.#{stack['region']}.amazonaws.com:/moodledata"
   fstype 'nfs'
   options 'rw'
-  action [:mount, :enable] # force unmount+remount - needed in case moodledata server goes down and is recreated
+  # action [:mount, :enable] # force unmount+remount - needed in case NFS server goes down and changes address
 end

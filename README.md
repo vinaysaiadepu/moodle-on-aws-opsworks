@@ -3,7 +3,12 @@
 Attempting to setup Moodle server on Opsworks
 - Apache 2.4
 - PHP 5.6
+- Memcached (runs on 1st front-end web server)
+- Amazon RDS (MySQL 5.7)
 - App install from Github
+
+This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS regions.
+
 
 ## Setup
 
@@ -21,7 +26,6 @@ Set up a t2.micro or t2.small RDS instance.
 -- DB Instance Class: t2.micro will do for a small setup
 -- Multi-AZ: Up to you
 -- Storage type: SSD either
--- Allocated storage: At least 50-100GB
 -- DB instance identifier etc: "Moodle" / Up to you, but note the details you enter
 - Step 4:
 -- VPC: Same as all others in this setup
@@ -34,6 +38,7 @@ Note: If you used triggers in your Moodle database, you will need to create an R
 -- Name: "Moodle"
 -- Edit parameters
 -- log_bin_trust_function_creators => 1
+
 
 #### ELB (Load balancer)
 
@@ -53,6 +58,11 @@ Create load balancer
 - Health check:
 -- Ping path: /aws-up-check.php
 - Instances: none yet
+
+
+#### EFS
+
+Create an EFS volume. No special configuration required. Note the filesystem ID.
 
 
 #### EC2 Security Groups: 
@@ -78,6 +88,11 @@ Create the following security groups in your target region:
 - Use custom Chef cookbooks: yes
 - Repo: https://github.com/jamesoflol/opsworks-demo.git
 - Use OpsWorks security groups: no
+- Custom JSON: (example below. s3 backup optional, EFS_ID required)
+{
+  "S3_backup_bucket": "my-moodledata-bucket",
+  "EFS_ID": "fs-1234567a"
+}
 
 #### Layer: moodle-web-server
 
@@ -92,33 +107,6 @@ Recipes:
 
 Network:
 - Elastic load balancer: Moodle
-- Public IP Address: Yes
-
-#### Layer: moodle-data-server
-
-Security:
-- moodle-opsworks-all
-
-Recipes:
-- Configure: moodle_data_server::default
-
-Network:
-- Public IP Address: Yes
-
-EBS Volumes:
-- Mount point: /vol/moodledata
-- Size total: 100GB (or whatever's approps)
-- Volume type: General Purpose SSD
-
-#### Layer: memcached
-
-Security:
-- moodle-opsworks-all
-
-Recipes:
-- Configure: memcached
-
-Network:
 - Public IP Address: Yes
 
 #### Layer: RDS
@@ -140,10 +128,14 @@ Apps->Add App
 
 #### Instances
 
+...
+
 
 ### Optional
 
 #### Backup Moodledata to S3:
+
+Backups will be run from the first front-end webserver
 
 To do this, you'll need to 
 - create an IAM policy (that gives permission to access an s3 bucket), 
@@ -154,6 +146,7 @@ To do this, you'll need to
 - add the backup lifecycle event to the moodledata layer
 - add the IAM instance profile to moodledata and web layers
 
+
 ## Todo:
 
 high:
@@ -161,10 +154,7 @@ high:
 
 med:
 - cloudformation script for all this
-- code to check that app exists
-- code to check that memcached/etc exists
--- 16>>         :memcached_ip   => memcached['private_ip']
--- undefined method `[]' for nil:NilClass
+- code to check that opsworks moodle 'app' exists
 - code to check that mount is still right? depends if remounting is working
 -- if File.read(/procsomething).include?(ip:/nfssomething)
 - s3 backup/restore
