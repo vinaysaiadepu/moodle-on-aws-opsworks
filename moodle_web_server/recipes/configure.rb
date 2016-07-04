@@ -33,6 +33,6 @@ end
 mount '/mnt/nfs' do
   device "#{thisinstance['availability_zone']}.#{node['EFS_ID']}.efs.#{stack['region']}.amazonaws.com:/"
   fstype 'nfs4'
-  options 'rw','nfsvers=4.1'
+  options 'rw'
   # action [:mount, :enable] # force unmount+remount - needed in case NFS server goes down and changes address
 end
