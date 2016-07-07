@@ -10,19 +10,11 @@ s3_file "/tmp/itmmoodle.zip" do
     bucket "/" + bucket_url.split("/", 5)[3]
     aws_access_key_id app["app_source"]["user"]
     aws_secret_access_key app["app_source"]["password"]
-    s3_url "https://s3.amazonaws.com/bucket"
     owner "apache"
     group "ec2-user"
     mode "0770"
     action :create
 end
-
-
-
-
-
-    
-
 
 
 # Symlink app to /var/www/html
