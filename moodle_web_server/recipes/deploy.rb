@@ -24,18 +24,15 @@ directory app_path + "/*" do
   action :delete
 end
 
-zipfile "/tmp/#{app['shortname']}" + ".zip" do
-  into app_path
+execute 'unpack app' do
+  command "unzip -o /tmp/#{app['shortname']}" + ".zip -d " + app_path
 end
-
 
 # Symlink app to /var/www/html
 directory '/var/www/html' do
 	action :delete
 	ignore_failure true
 end
-
-
 
 link '/var/www/html' do
 	to app_path
