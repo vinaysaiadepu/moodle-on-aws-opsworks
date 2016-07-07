@@ -6,8 +6,8 @@ bucket_url = app["app_source"]["url"]
 
 
 s3_file "/tmp/itmmoodle.zip" do
-    remote_path "/" + bucket_url.split("/", 5)[5]
-    bucket "/" + bucket_url.split("/", 5)[4]
+    remote_path "/" + bucket_url.split("/", 5)[4]
+    bucket "/" + bucket_url.split("/", 5)[3]
     aws_access_key_id app["app_source"]["user"]
     aws_secret_access_key app["app_source"]["password"]
     s3_url "https://s3.amazonaws.com/bucket"
