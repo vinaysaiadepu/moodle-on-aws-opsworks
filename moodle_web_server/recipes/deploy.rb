@@ -1,11 +1,10 @@
 # Cloning app from github - this will only grab the first app and ignore all others. This first/only app should be a Moodle github repo
-include_recipe "s3_file"
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
 bucket_url = app["app_source"]["url"]
 
 
-s3_file "/tmp/itmmoodle.zip" do
+s3_file "/tmp/#{app['shortname']}" + ".zip" do
     remote_path "/" + bucket_url.split("/", 5)[4]
     bucket "/" + bucket_url.split("/", 5)[3]
     aws_access_key_id app["app_source"]["user"]
@@ -14,6 +13,10 @@ s3_file "/tmp/itmmoodle.zip" do
     group "ec2-user"
     mode "0770"
     action :create
+end
+
+zipfile "/tmp/#{app['shortname']}" + ".zip" do
+  into app_path
 end
 
 
