@@ -1,4 +1,5 @@
 # Cloning app from github - this will only grab the first app and ignore all others. This first/only app should be a Moodle github repo
+include_recipe "s3_file"
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
 bucket_url = app["app_source"]["url"]
