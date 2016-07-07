@@ -1,11 +1,28 @@
 # Cloning app from github - this will only grab the first app and ignore all others. This first/only app should be a Moodle github repo
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
-git app_path do
-	repository app["app_source"]["url"]
-	revision app["app_source"]["revision"]
-	depth 1
+bucket_url = app["app_source"]["url"]
+
+
+s3_file "/tmp/itmmoodle.zip" do
+    remote_path "/" + url.split("/", 5)[5]
+    bucket "/" + url.split("/", 5)[4]
+    aws_access_key_id app["app_source"]["user"]
+    aws_secret_access_key app["app_source"]["password"]
+    s3_url "https://s3.amazonaws.com/bucket"
+    owner "apache"
+    group "ec2-user"
+    mode "0770"
+    action :create
 end
+
+
+
+
+
+    
+
+
 
 # Symlink app to /var/www/html
 directory '/var/www/html' do
