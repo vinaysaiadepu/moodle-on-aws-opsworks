@@ -17,10 +17,10 @@ This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS
 #### VPC (Virtual network)
 
 ##### Setup
-##### 1. AWS Console > VPC > Start VPC Wizard
-##### 2. Select >
+- 1. AWS Console > VPC > Start VPC Wizard
+- 2. Select >
 IP CIDR block:10.10.0.0/16
-VPC name: ITM-Moodle-ops
+VPC name: Moodle-ops
 
 Public subnet:*10.10.0.0/24
 Subnet name:Public subnet
@@ -28,8 +28,8 @@ Subnet:Moodle Public subnet
 Enable DNS hostnames:*Tes
 Hardware tenancy: Default
 Enable ClassicLink:*no
-##### 3.Navigate to Subnets in VPC Dashboard
-##### 4. Create Subnet
+- 3.Navigate to Subnets in VPC Dashboard
+- 4. Create Subnet
 Name: Moodle Private Subnet
 CIDR: 10.10.20.0/24
 
@@ -65,8 +65,8 @@ AWS->Services->EC2->Load balancers
 
 
 Create load balancer
-- Load balancer name: ITM-Moodle-ops
-- Create LB Inside : ITM-Moodle-ops (or VPC name created above)
+- Load balancer name: Moodle-ops
+- Create LB Inside : Moodle-ops (or VPC name created above)
 - Listener config:
 -- HTTP80->HTTP80
 -- HTTPS443->HTTP80
@@ -102,9 +102,9 @@ Create the following security groups in your target region and VPC:
 ### Opsworks 
 
 #### Stack
-- Stack name : ITM-Moodle-ops
+- Stack name : Moodle-ops
 - Region: Same as VPC/EFS/RDS
-- VPC: ITM-Moodle-ops
+- VPC: Moodle-ops
 - Default subnet Moodle Private Subnet
 - Default operating system: Amazon Linux [latest]
 - Default SSH key: [put in one of your EC2 SSH keys here, or you'll regret it when you go to troubleshoot]
@@ -147,9 +147,11 @@ Apps->Add App
 - Data source type: RDS
 -- Database instance/name: as above
 - Application Source:
--- Type: Git
--- URL: https://github.com/moodle/moodle.git
--- Branch: MOODLE_31_STABLE (or latest)
+-- Type: S3 Archive
+-- URL: full url of zip file that contains moodle + plugins/themes that is hosted on amazon s3 bucket (
+-- Access key ID : username of IAM user who has access to above zip file
+-- Secret access key: private key for above user
+
 
 #### Instances
 
