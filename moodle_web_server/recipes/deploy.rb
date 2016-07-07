@@ -16,6 +16,10 @@ s3_file "/tmp/#{app['shortname']}" + ".zip" do
 end
 
 directory app_path do
+  action :create
+end
+
+directory app_path + "/*" do
   recursive true
   action :delete
 end
