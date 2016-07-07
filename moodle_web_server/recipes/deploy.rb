@@ -15,6 +15,11 @@ s3_file "/tmp/#{app['shortname']}" + ".zip" do
     action :create
 end
 
+directory app_path do
+  recursive true
+  action :delete
+end
+
 zipfile "/tmp/#{app['shortname']}" + ".zip" do
   into app_path
 end
@@ -25,6 +30,9 @@ directory '/var/www/html' do
 	action :delete
 	ignore_failure true
 end
+
+
+
 link '/var/www/html' do
 	to app_path
 end
