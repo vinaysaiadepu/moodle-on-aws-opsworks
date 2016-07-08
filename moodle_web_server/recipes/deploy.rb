@@ -2,44 +2,45 @@
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
 
+
+directory app_path do
+	action :create
+end
+
+directory app_path + "/*" do
+	recursive true
+	action :delete
+end
+
 #Deploy s3 or git application
 case app['platform']
-when 's3'
-	s3_file "/tmp/#{app['shortname']}" + ".zip" do
-		bucket_url = app["app_source"]["url"]
-		remote_path "/" + bucket_url.split("/", 5)[4]
-		bucket "/" + bucket_url.split("/", 5)[3]
-		aws_access_key_id app["app_source"]["user"]
-		aws_secret_access_key app["app_source"]["password"]
-		owner "apache"
-		group "ec2-user"
-		mode "0770"
-		action :create
-	end
+	when 's3'
+		s3_file "/tmp/#{app['shortname']}" + ".zip" do
+			bucket_url = app["app_source"]["url"]
+			remote_path "/" + bucket_url.split("/", 5)[4]
+			bucket "/" + bucket_url.split("/", 5)[3]
+			aws_access_key_id app["app_source"]["user"]
+			aws_secret_access_key app["app_source"]["password"]
+			owner "apache"
+			group "ec2-user"
+			mode "0770"
+			action :create
+		end
 
-	directory app_path do
-		action :create
-	end
+		execute 'unpack app' do
+			command "unzip -o /tmp/#{app['shortname']}" + ".zip -d " + app_path
+		end
 
-	directory app_path + "/*" do
-		recursive true
-		action :delete
-	end
-
-	execute 'unpack app' do
-		command "unzip -o /tmp/#{app['shortname']}" + ".zip -d " + app_path
-	end
-
-when 'git'
-	directory app_path do
-		action :create
-	end
-
-	git app_path do
-		repository app["app_source"]["url"]
-		revision app["app_source"]["revision"]
-		depth 1
-	end
+		file "/tmp/#{app['shortname']}" + ".zip" do
+			action :delete
+		end
+	when 'git'
+		
+		git app_path do
+			repository app["app_source"]["url"]
+			revision app["app_source"]["revision"]
+			depth 1
+		end
 end
 
 
