@@ -18,19 +18,23 @@ when 's3'
 	end
 
 	directory app_path do
-	action :create
+		action :create
 	end
 
 	directory app_path + "/*" do
-	recursive true
-	action :delete
+		recursive true
+		action :delete
 	end
 
 	execute 'unpack app' do
-	command "unzip -o /tmp/#{app['shortname']}" + ".zip -d " + app_path
+		command "unzip -o /tmp/#{app['shortname']}" + ".zip -d " + app_path
 	end
 
 when 'git'
+	directory app_path do
+		action :create
+	end
+
 	git app_path do
 		repository app["app_source"]["url"]
 		revision app["app_source"]["revision"]
