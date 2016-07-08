@@ -40,6 +40,7 @@ case app['app_source']['type']
 			repository app["app_source"]["url"]
 			revision app["app_source"]["revision"]
 			depth 1
+			action :sync
 		end
 end
 
