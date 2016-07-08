@@ -13,7 +13,7 @@ directory app_path + "/*" do
 end
 
 #Deploy s3 or git application
-case app['platform']
+case app['type']
 	when 's3'
 		s3_file "/tmp/#{app['shortname']}" + ".zip" do
 			bucket_url = app["app_source"]["url"]
