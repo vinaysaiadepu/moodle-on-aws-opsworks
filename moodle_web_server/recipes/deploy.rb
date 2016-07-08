@@ -48,11 +48,13 @@ end
 # Symlink app to /var/www/html
 directory '/var/www/html' do
 	action :delete
+	not_if { File.symlink?('/var/www/html') }
 	ignore_failure true
 end
 
 link '/var/www/html' do
 	to app_path
+	not_if { File.symlink?('/var/www/html') }
 end
 
 # Add Moodle config.php file
