@@ -1,0 +1,8 @@
+source 'https://supermarket.chef.io'
+
+metadata
+
+
+cookbook 'memcached', '~> 3.0.1'
+cookbook 'docker', '~> 2.9.2'
+cookbook 's3_file', '~> 2.7.0'

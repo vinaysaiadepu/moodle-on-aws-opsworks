@@ -1,1 +1,0 @@
-0 * * * * ec2-user /bin/sh /home/ec2-user/backup-moodledata.sh
