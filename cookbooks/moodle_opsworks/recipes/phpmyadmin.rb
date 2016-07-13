@@ -19,3 +19,5 @@ docker_container 'my_myadmin' do
   port '80:80'
   env "PMA_HOST=#{db['address']}"
 end
+
+include_recipe 'oh-my-zsh'
