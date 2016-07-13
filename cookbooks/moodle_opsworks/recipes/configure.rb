@@ -37,4 +37,4 @@ mount '/mnt/nfs' do
   # action [:mount, :enable] # force unmount+remount - needed in case NFS server goes down and changes address
 end
 
-include_recipe 'moodle_cron'
+include_recipe 'moodle_opsworks::cron'
