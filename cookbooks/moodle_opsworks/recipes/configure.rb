@@ -20,17 +20,6 @@ template 'opsworks.php' do
 end
 
 
-template 'config.php' do
-	path '/mnt/nfs/moodledata/muc/config.php'
-	source 'config.php.muc.erb'
-	owner 'apache'
-	group 'ec2-user'
-	mode '0770'
-	variables(
-		:memcached_ip	=> memcached['private_ip']
-	)
-end
-
 
 # Create and mount Moodledata NFS folder
 
@@ -47,6 +36,19 @@ mount '/mnt/nfs' do
   fstype 'nfs4'
   options 'rw'
   # action [:mount, :enable] # force unmount+remount - needed in case NFS server goes down and changes address
+end
+
+
+
+template 'config.php' do
+	path '/mnt/nfs/moodledata/muc/config.php'
+	source 'config.php.muc.erb'
+	owner 'apache'
+	group 'ec2-user'
+	mode '0770'
+	variables(
+		:memcached_ip	=> memcached['private_ip']
+	)
 end
 
 include_recipe 'moodle_opsworks::cron'

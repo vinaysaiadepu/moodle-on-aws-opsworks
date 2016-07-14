@@ -16,9 +16,12 @@ bin/*
 .kitchen.local.yml
 
 
-
-cookbooks/moodle_opsworks/berks-cookbooks/
+cookbooks/moodle_opsworks/cookbooks.tar.gz
+cookbooks/moodle_opsworks/berks-cookbooks/*
+cookbooks/moodle_opsworks/cookbooks/*
 
 
 *.tar.gz
-cookbooks/moodle_opsworks/cookbooks.tar.gz
+
+
+
