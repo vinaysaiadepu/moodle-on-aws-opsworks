@@ -20,6 +20,18 @@ template 'opsworks.php' do
 end
 
 
+template 'config.php' do
+	path '/mnt/nfs/moodledata/muc/config.php'
+	source 'config.php.muc.erb'
+	owner 'apache'
+	group 'ec2-user'
+	mode '0770'
+	variables(
+		:memcached_ip	=> memcached['private_ip']
+	)
+end
+
+
 # Create and mount Moodledata NFS folder
 
 directory '/mnt/nfs' do

@@ -18,3 +18,7 @@ bin/*
 
 
 cookbooks/moodle_opsworks/berks-cookbooks/
+
+
+*.tar.gz
+cookbooks/moodle_opsworks/cookbooks.tar.gz

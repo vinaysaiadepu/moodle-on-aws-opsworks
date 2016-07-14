@@ -18,9 +18,6 @@ platforms:
 suites:
   - name: web
     run_list:
-      - recipe[moodle_opsworks::setup]
+      - recipe[oh_my_zsh]
     attributes:
-    - name: phpmyadmin
-    run_list:
-      - recipe[moodle_opsworks::phpmyadmin]
-    attributes:
+
