@@ -110,7 +110,7 @@ Create the following security groups in your target region and VPC:
 - Default SSH key: [put in one of your EC2 SSH keys here, or you'll regret it when you go to troubleshoot]
 - Chef version: 12
 - Use custom Chef cookbooks: yes
-- Repo: https://github.com/ITMasters/moodle-on-aws-opsworks.git
+- Repo: S3 zip, run berks package on moodle_opsworks directory to create a packaged version of cookbooks
 - Create a new public/private key rsa pair, add pub key to deploy tab on github add private as Repository SSH Key
 - Use OpsWorks security groups: no
 - Custom JSON: (example below. s3 backup optional, EFS_ID required)
@@ -126,9 +126,10 @@ Security:
 - moodle-opsworks-webserver
 
 Recipes:
-- Setup: apache::default
-- Configure: moodle_web_server::configure
-- Deploy: moodle_web_server::deploy
+- Setup: moodle_opsworks::setup, oh_my_zsh (optional)
+- Configure: moodle_opsworks::configure
+- Deploy: moodle_opsworks::deploy
+- Undeploy: moodle_opsworks::undeploy
 
 Network:
 - Elastic load balancer: Moodle
@@ -140,16 +141,17 @@ Network:
 
 #### App
 
-You have to add an "App". There's only one: Moodle
+You have to add an "App". it can come from git or an s3 zip or tar.gz file
 
 Apps->Add App
-- Name: Moodle
+- Name: Moodle (required)
 - Data source type: RDS
 -- Database instance/name: as above
 - Application Source:
--- Type: Git
+-- Type: Git/S3
 -- URL: https://github.com/moodle/moodle.git
--- Branch: MOODLE_31_STABLE (or latest)
+-- Branch: MOODLE_31_STABLE (if git)
+-- fill in s3 credentials if the file is not publically accessible
 
 #### Instances
 
@@ -178,6 +180,7 @@ high:
 - get it more working...
 
 med:
+- test kitchen tests
 - cloudformation script for all this
 - code to check that opsworks moodle 'app' exists
 - code to check that mount is still right? depends if remounting is working
