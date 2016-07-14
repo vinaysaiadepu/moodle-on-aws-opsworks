@@ -18,7 +18,9 @@ $CFG->dboptions = array (
   'dbport' => '',
   'dbsocket' => '',
 );
-$CFG->wwwroot   = 'http://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
+$CFG->wwwroot   = 'https://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
+$CFG->sslproxy = true; 
+
 $CFG->dataroot  = '/mnt/nfs/moodledata';
 $CFG->localcachedir = '/dev/shm/moodledata/localcache';
 $CFG->admin     = 'admin';
