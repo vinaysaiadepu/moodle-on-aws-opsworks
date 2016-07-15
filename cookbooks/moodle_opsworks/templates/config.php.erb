@@ -19,6 +19,7 @@ $CFG->dboptions = array (
   'dbsocket' => '',
 );
 // Enables SSl proxy if behind a load balencer (Amazon ELB tested) and uses SSL
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])){
         $CFG->wwwroot   = 'https://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
         $CFG->sslproxy = true;
  } else {
