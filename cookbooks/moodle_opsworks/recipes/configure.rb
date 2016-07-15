@@ -39,7 +39,7 @@ mount '/mnt/nfs' do
 end
 
 
-
+# use memcached for muc cache
 template 'config.php' do
 	path '/mnt/nfs/moodledata/muc/config.php'
 	source 'config.php.muc.erb'
