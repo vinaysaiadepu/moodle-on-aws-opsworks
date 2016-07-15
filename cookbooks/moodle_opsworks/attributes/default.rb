@@ -7,8 +7,6 @@ override['oh_my_zsh']['users'] = [{
   :login => 'root',
   :theme => 'candy',
   :plugins => ['git', 'gem', 'docker', 'aws', 'cp']
-}
-
-]
+}]
 
 

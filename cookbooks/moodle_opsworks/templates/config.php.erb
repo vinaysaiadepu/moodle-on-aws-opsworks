@@ -18,8 +18,13 @@ $CFG->dboptions = array (
   'dbport' => '',
   'dbsocket' => '',
 );
-$CFG->wwwroot   = 'https://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
-$CFG->sslproxy = true; 
+// Enables SSl proxy if behind a load balencer (Amazon ELB tested) and uses SSL
+        $CFG->wwwroot   = 'https://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
+        $CFG->sslproxy = true;
+ } else {
+        $CFG->wwwroot   = 'http://' . (array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : 'localhost');
+        $CFG->sslproxy = false;
+};
 
 $CFG->dataroot  = '/mnt/nfs/moodledata';
 $CFG->localcachedir = '/dev/shm/moodledata/localcache';
