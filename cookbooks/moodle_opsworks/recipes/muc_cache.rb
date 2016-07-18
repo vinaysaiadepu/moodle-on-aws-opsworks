@@ -3,17 +3,6 @@ firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND statu
 
 # Only first instance works as a memcached host
 	if thisinstance['instanceid'] == firstinstance['instanceid']
-		memcached_instance 'memcached_sessions' do
-            port 11_212
-            memory 64
-            action :start
-        end
-## Seperate cache so we can purge without killing session
-        memcached_instance 'memcached_application' do
-            port 111_212
-            memory 128
-            action :start
-        end
 
 		template 'config.php' do
             path '/mnt/nfs/moodledata/muc/config.php'
@@ -34,13 +23,7 @@ firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND statu
             command 'sudo -u apache /usr/bin/php /var/www/html/admin/cli/scan_cache.php'
         end
 	else
-		memcached_instance 'memcached_sessions' do
-            action :remove
-        end
 
-        memcached_instance 'memcached_application' do
-            action :remove
-        end
 	end	
 
 
