@@ -32,7 +32,7 @@ $CFG->localcachedir = '/dev/shm/moodledata/localcache';
 $CFG->admin     = 'admin';
 
 $CFG->session_handler_class = '\core\session\memcached';
-$CFG->session_memcached_save_path = $ops->memcached_ip . ':11211';
+$CFG->session_memcached_save_path = $ops->memcached_ip . ':11212';
 $CFG->session_memcached_prefix = 'memc.sess.key.';
 $CFG->session_memcached_acquire_lock_timeout = 120;
 $CFG->session_memcached_lock_expire = 7200;       // Ignored if memcached extension <= 2.1.0
