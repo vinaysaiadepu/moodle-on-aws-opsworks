@@ -1,8 +1,6 @@
 thisinstance = search(:aws_opsworks_instance, "self:true").first
 firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").first
 
-
-
 # Only first instance works as a memcached host
 	if thisinstance['instanceid'] == firstinstance['instanceid']
 		memcached_instance 'memcached_sessions' do
@@ -20,7 +18,7 @@ firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND statu
             group 'ec2-user'
             mode '0770'
             variables(
-                :memcached_ip	=> memcached['private_ip']
+                :memcached_ip	=> firstinstance['private_ip']
             )
         end
 
