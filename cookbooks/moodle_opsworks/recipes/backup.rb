@@ -10,9 +10,10 @@ template '/home/ec2-user/backup-moodledata.sh' do
 	)
 end
 
-
-if thisinstance['instanceid'] == lastinstance['instanceid']
-	source 'hourly-moodlebackup.cron'
-else
-	source 'empty'
+template '/etc/cron.d/hourly-moodlebackup.cron' do
+    if thisinstance['instanceid'] == lastinstance['instanceid']
+        source 'hourly-moodlebackup.cron'
+    else
+        source 'empty'
+    end
 end
