@@ -1,8 +1,8 @@
 #!/bin/bash
-SIZE=$(du -B 1 /mnt/nfs/moodledata/filedir | cut -f 1 -d "   ")   
-if [[ $SIZE -gt 2147483648]]; then
+SIZE=$(du -sm /mnt/nfs/moodledata/filedir | awk '{print $1;}')
+if [ $SIZE -gt 2000 ]; then
   echo "running backup";
   aws s3 sync /mnt/nfs/moodledata/filedir s3://<%= @backupbucket %>/moodledata/filedir2 --delete;
 else
-  echo "backup not run - no files in source dir";
+  echo "Files to backup are smaller than expected please check directory";
 fi
