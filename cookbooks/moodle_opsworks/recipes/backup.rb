@@ -12,7 +12,7 @@ end
 
 template '/etc/cron.d/hourly-moodlebackup.cron' do
     if thisinstance['instanceid'] == lastinstance['instanceid']
-        source 'hourly-moodlebackup.cron'
+        source 'hourly-moodlebackup.cron.erb'
     else
         source 'empty'
     end
