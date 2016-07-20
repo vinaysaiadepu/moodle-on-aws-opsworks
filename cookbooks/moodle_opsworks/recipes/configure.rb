@@ -39,4 +39,4 @@ mount '/mnt/nfs' do
 end
 
 include_recipe 'moodle_opsworks::cron'
-include_recipe 'moodle_opsworks::muc_cache'
+
