@@ -64,7 +64,8 @@ search("aws_opsworks_app").each do |app|
 		group "ec2-user"
 		mode '0770'
 		variables(
-			:db_name => app["data_sources"][0]["database_name"]
+			:db_name => app["data_sources"][0]["database_name"],
+			:pw_salt => node['moodle_pw_salt'],
 		)
 	end
 
