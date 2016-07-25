@@ -20,7 +20,7 @@ This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS
 ##### 1. AWS Console > VPC > Start VPC Wizard
 ##### 2. Select >
 IP CIDR block:10.10.0.0/16
-VPC name: ITM-Moodle-ops
+VPC name: Moodle-ops 
 
 Public subnet:*10.10.0.0/24
 Subnet name:Public subnet
@@ -83,7 +83,7 @@ Create load balancer
 
 #### EFS
 
-Create an EFS volume. No special configuration required. Note the filesystem ID.
+Create an EFS volume. No special configuration required. Note the filesystem ID as this is used later.
 Subnet: Moodle Private Subnet
 
 #### EC2 Security Groups: 
@@ -116,7 +116,8 @@ Create the following security groups in your target region and VPC:
 - Custom JSON: (example below. s3 backup optional, EFS_ID required)
 {
   "S3_backup_bucket": "my-moodledata-bucket",
-  "EFS_ID": "fs-1234567a"
+  "EFS_ID": "fs-1234567a",
+"moodle_pw_salt": "some very long random string"
 }
 
 #### Layer: moodle-web-server
@@ -127,7 +128,7 @@ Security:
 
 Recipes:
 - Setup: moodle_opsworks::setup, oh_my_zsh (optional)
-- Configure: moodle_opsworks::configure
+- Configure: moodle_opsworks::configure, (optionally add moodle_opsworks::muc_cache after install has been tested to use memcached for file caching)
 - Deploy: moodle_opsworks::deploy
 - Undeploy: moodle_opsworks::undeploy
 
@@ -141,7 +142,7 @@ Network:
 
 #### App
 
-You have to add an "App". it can come from git or an s3 zip or tar.gz file
+You have to add an "App". it can come from git or a tar.gz file hosted on S3
 
 Apps->Add App
 - Name: Moodle (required)
@@ -155,12 +156,14 @@ Apps->Add App
 
 #### Instances
 
-...
+Create a minimum of 1 24/7 for the moodle-web-server layer and start it. 
+Create optional load/time based instances as needed for the layer.
+- Note when updating instances offline instance won't receive deploy/configure/update cookbook events, either delete then re-create them after you have applied updates to online instances or bring them online while doing updates/changes.
 
 
 ### Optional
 
-#### Backup Moodledata to S3:
+#### Backup Moodledata to S3: (Untested and incomplete)
 
 Backups will be run from the first front-end webserver
 
@@ -175,21 +178,21 @@ To do this, you'll need to
 
 
 ## Todo:
-
 high:
-- get it more working...
+- code to check that mount is still right? depends if remounting is working [if File.read(/procsomething).include?(ip:/nfssomething)]
+- improve muc cache recipe so it can be included in run list at setup
 
 med:
 - test kitchen tests
-- cloudformation script for all this
 - code to check that opsworks moodle 'app' exists
-- code to check that mount is still right? depends if remounting is working
--- if File.read(/procsomething).include?(ip:/nfssomething)
 - s3 backup/restore
 - add detail to the "Backup Moodledata to S3" section of this doc
+- add instructions for bundling thmes/plugins
 
 low:
 - moodle_web_server: fix deploy script so that it doesn't need to symlink /var/www/html
+- cloudformation script for all this
+- Allow app install from sources other than s3/git
 
 ## Notes for playing around with Chef local in SSH on individual machines
 
