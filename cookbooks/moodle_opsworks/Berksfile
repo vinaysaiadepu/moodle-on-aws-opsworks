@@ -1,0 +1,10 @@
+source 'https://supermarket.chef.io'
+
+metadata
+
+
+cookbook 'memcached', '~> 3.0.1'
+cookbook 'docker', '~> 2.9.2'
+cookbook 's3_file', '~> 2.7.0'
+cookbook 'oh_my_zsh', git: 'https://github.com/shingara/oh-my-zsh-chef.git'
+cookbook 'xdebug', '~> 1.0.0'

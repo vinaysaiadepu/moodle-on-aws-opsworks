@@ -20,7 +20,7 @@ This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS
 ##### 1. AWS Console > VPC > Start VPC Wizard
 ##### 2. Select >
 IP CIDR block:10.10.0.0/16
-VPC name: ITM-Moodle-ops
+VPC name: Moodle-ops 
 
 Public subnet:*10.10.0.0/24
 Subnet name:Public subnet
@@ -83,7 +83,7 @@ Create load balancer
 
 #### EFS
 
-Create an EFS volume. No special configuration required. Note the filesystem ID.
+Create an EFS volume. No special configuration required. Note the filesystem ID as this is used later.
 Subnet: Moodle Private Subnet
 
 #### EC2 Security Groups: 
@@ -110,13 +110,14 @@ Create the following security groups in your target region and VPC:
 - Default SSH key: [put in one of your EC2 SSH keys here, or you'll regret it when you go to troubleshoot]
 - Chef version: 12
 - Use custom Chef cookbooks: yes
-- Repo: https://github.com/ITMasters/moodle-on-aws-opsworks.git
+- Repo: S3 zip, run berks package on moodle_opsworks directory to create a packaged version of cookbooks
 - Create a new public/private key rsa pair, add pub key to deploy tab on github add private as Repository SSH Key
 - Use OpsWorks security groups: no
 - Custom JSON: (example below. s3 backup optional, EFS_ID required)
 {
   "S3_backup_bucket": "my-moodledata-bucket",
-  "EFS_ID": "fs-1234567a"
+  "EFS_ID": "fs-1234567a",
+"moodle_pw_salt": "some very long random string"
 }
 
 #### Layer: moodle-web-server
@@ -126,9 +127,10 @@ Security:
 - moodle-opsworks-webserver
 
 Recipes:
-- Setup: apache::default
-- Configure: moodle_web_server::configure
-- Deploy: moodle_web_server::deploy
+- Setup: moodle_opsworks::setup, oh_my_zsh (optional)
+- Configure: moodle_opsworks::configure, (optionally add moodle_opsworks::muc_cache after install has been tested to use memcached for file caching)
+- Deploy: moodle_opsworks::deploy
+- Undeploy: moodle_opsworks::undeploy
 
 Network:
 - Elastic load balancer: Moodle
@@ -140,25 +142,28 @@ Network:
 
 #### App
 
-You have to add an "App". There's only one: Moodle
+You have to add an "App". it can come from git or a tar.gz file hosted on S3
 
 Apps->Add App
-- Name: Moodle
+- Name: Moodle (required)
 - Data source type: RDS
 -- Database instance/name: as above
 - Application Source:
--- Type: Git
+-- Type: Git/S3
 -- URL: https://github.com/moodle/moodle.git
--- Branch: MOODLE_31_STABLE (or latest)
+-- Branch: MOODLE_31_STABLE (if git)
+-- fill in s3 credentials if the file is not publically accessible
 
 #### Instances
 
-...
+Create a minimum of 1 24/7 for the moodle-web-server layer and start it. 
+Create optional load/time based instances as needed for the layer.
+- Note when updating instances offline instance won't receive deploy/configure/update cookbook events, either delete then re-create them after you have applied updates to online instances or bring them online while doing updates/changes.
 
 
 ### Optional
 
-#### Backup Moodledata to S3:
+#### Backup Moodledata to S3: (Untested and incomplete)
 
 Backups will be run from the first front-end webserver
 
@@ -173,20 +178,21 @@ To do this, you'll need to
 
 
 ## Todo:
-
 high:
-- get it more working...
+- code to check that mount is still right? depends if remounting is working [if File.read(/procsomething).include?(ip:/nfssomething)]
+- improve muc cache recipe so it can be included in run list at setup
 
 med:
-- cloudformation script for all this
+- test kitchen tests
 - code to check that opsworks moodle 'app' exists
-- code to check that mount is still right? depends if remounting is working
--- if File.read(/procsomething).include?(ip:/nfssomething)
 - s3 backup/restore
 - add detail to the "Backup Moodledata to S3" section of this doc
+- add instructions for bundling thmes/plugins
 
 low:
 - moodle_web_server: fix deploy script so that it doesn't need to symlink /var/www/html
+- cloudformation script for all this
+- Allow app install from sources other than s3/git
 
 ## Notes for playing around with Chef local in SSH on individual machines
 

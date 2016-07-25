@@ -1,0 +1,27 @@
+.vagrant
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+
+# Bundler
+Gemfile.lock
+bin/*
+.bundle/*
+
+.kitchen/
+.kitchen.local.yml
+
+
+cookbooks/moodle_opsworks/cookbooks.tar.gz
+cookbooks/moodle_opsworks/berks-cookbooks/*
+cookbooks/moodle_opsworks/cookbooks/*
+
+
+*.tar.gz
+
+
+
