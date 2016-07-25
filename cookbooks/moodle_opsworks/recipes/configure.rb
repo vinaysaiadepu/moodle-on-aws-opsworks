@@ -38,5 +38,18 @@ mount '/mnt/nfs' do
   # action [:mount, :enable] # force unmount+remount - needed in case NFS server goes down and changes address
 end
 
+
+template 'php-5.6.ini' do
+		path "/etc/php-5.6.ini"
+		source "/etc/php-5.6.ini"
+		owner "root"
+		group "root"
+		mode '0644'
+end
+
 include_recipe 'moodle_opsworks::cron'
+
+service "httpd" do
+	action :restart
+end
 
