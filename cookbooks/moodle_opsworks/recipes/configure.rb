@@ -41,7 +41,7 @@ end
 
 template 'php-5.6.ini' do
 		path "/etc/php-5.6.ini"
-		source "/etc/php-5.6.ini"
+		source "php-5.6.ini"
 		owner "root"
 		group "root"
 		mode '0644'
