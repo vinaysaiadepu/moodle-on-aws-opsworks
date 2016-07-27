@@ -11,3 +11,5 @@ memcached_instance 'memcached_application' do
   memory 128
   action [:start, :enable]
 end
+
+
