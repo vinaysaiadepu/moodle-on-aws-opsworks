@@ -9,7 +9,6 @@ Attempting to setup Moodle server on Opsworks
 
 This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS regions.
 
-
 ## Setup
 [Instructions in Wiki](https://github.com/ITMasters/moodle-on-aws-opsworks/wiki/Setup)
 
@@ -20,8 +19,6 @@ high:
 
 med:
 - test kitchen tests
-- code to check that opsworks moodle 'app' exists
-- s3 backup/restore
 - add detail to the "Backup Moodledata to S3" section of this doc
 - add instructions for bundling thmes/plugins
 
