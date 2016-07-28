@@ -1,7 +1,7 @@
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
 
 
-
+## TODO, check if db details have changed, most of the time they won't and we can probably ignore removing/recreating the instance
 
 execute 'stop all docker containers' do
   command "docker stop $(docker ps -a -q)"

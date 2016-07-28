@@ -1,3 +1,4 @@
+# Look through opsworks apps and deploy moodle if found
 search("aws_opsworks_app").each do |app|
  if app['name'] == "Moodle"
 	app_path = "/srv/#{app['shortname']}"
@@ -77,6 +78,7 @@ search("aws_opsworks_app").each do |app|
 		group "ec2-user"
 		mode '0770'
 	end
-
+else
+	log('No moodle application found, check app name in opsworks') { level :warn }
  end
 end
