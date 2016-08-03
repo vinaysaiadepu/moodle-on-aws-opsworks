@@ -1,4 +1,6 @@
 thisinstance = search(:aws_opsworks_instance, "self:true").first
+log(thisinstance){level :warn}
+
 lastinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").last
 firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").first
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
@@ -56,7 +58,7 @@ template '/home/ec2-user/backup-moodledata.sh' do
 	variables(
 		:backupbucket		=> node['S3_backup_bucket'],
 		:stack				=> stack['name'],
-		:moodledata_size	=> node['moodledata_size'],
+		:moodledata_size	=> node['moodledata_size']
 	)
 end
 
