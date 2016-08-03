@@ -3,6 +3,17 @@ db = search(:aws_opsworks_rds_db_instance, "*:*").first
 
 ## TODO, check if db details have changed, most of the time they won't and we can probably ignore removing/recreating the instance
 
+# Create and mount Moodledata NFS folder
+directory '/mnt/nfs' do
+  owner 'ec2-user'
+  group 'ec2-user'
+  mode '0770'
+  action :create
+  recursive true
+end
+
+include_recipe "#{cookbook_name}::moodledata"
+
 execute 'stop all docker containers' do
   command "docker stop $(docker ps -a -q)"
 end

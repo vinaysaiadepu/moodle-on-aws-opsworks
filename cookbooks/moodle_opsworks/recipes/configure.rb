@@ -29,12 +29,7 @@ directory '/mnt/nfs' do
   recursive true
 end
 
-mount '/mnt/nfs' do
-  device "#{thisinstance['availability_zone']}.#{node['EFS_ID']}.efs.#{stack['region']}.amazonaws.com:/"
-  fstype 'nfs4'
-  options 'rw'
-  #action [:mount, :enable]
-end
+include_recipe "#{cookbook_name}::moodledata"
 
 # manage php settings so we can modify upload limit
 template 'php-5.6.ini' do
