@@ -1,5 +1,6 @@
 thisinstance = search(:aws_opsworks_instance, "self:true").first
 lastinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").last
+firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").first
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
 stack = search(:aws_opsworks_stack).first
 moodle_databases = []
@@ -62,7 +63,7 @@ end
 
 # choose instance to run backup from
 template '/etc/cron.d/moodlebackup.cron' do
-    if thisinstance['instanceid'] == lastinstance['instanceid']
+    if thisinstance['instanceid'] == firstinstance['instanceid']
         source 'moodlebackup.cron.erb'
     else
         source 'empty'
