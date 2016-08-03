@@ -1,6 +1,7 @@
 thisinstance = search(:aws_opsworks_instance, "self:true").first
 log(thisinstance){level :warn}
-firstinstance_in_layer = search(:aws_opsworks_instance, "role:#{thisinstance['role']} AND status:online").first
+#Find the first instance with the same layer ID as us
+firstinstance_in_layer = search(:aws_opsworks_instance, "layer_ids:#{thisinstance['layer_ids'][0]} AND status:online").first
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
 stack = search(:aws_opsworks_stack).first
 moodle_databases = []
@@ -67,5 +68,6 @@ template '/etc/cron.d/moodlebackup.cron' do
         source 'moodlebackup.cron.erb'
     else
         source 'empty'
+		log("Backup Was not configured for this instance ensure it is not the primary instance intended for backup"){level :warn}
     end
 end
