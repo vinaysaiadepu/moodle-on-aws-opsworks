@@ -1,4 +1,8 @@
-# Cloning app from github - this will only grab the first app and ignore all others. This first/only app should be a Moodle github repo
+if Chef::Config[:solo]
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+else
+
+# Undo the deploy events
 app = search(:aws_opsworks_app).first
 app_path = "/srv/#{app['shortname']}"
 
@@ -21,6 +25,4 @@ file "/tmp/#{app['shortname']}" + '.zip' do
   action :delete
 end
 
-
-
-
+end

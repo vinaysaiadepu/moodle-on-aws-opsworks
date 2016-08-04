@@ -1,3 +1,7 @@
+if Chef::Config[:solo]
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+else
+
 db = search(:aws_opsworks_rds_db_instance, '*:*').first
 this_instance = search(:aws_opsworks_instance, 'self:true').first
 memcached = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
@@ -52,5 +56,7 @@ end
 # restart httpd to pickup any changes
 service 'httpd' do
   action :restart
+end
+
 end
 

@@ -1,3 +1,6 @@
+if Chef::Config[:solo]
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+else
 # Look through opsworks apps and deploy moodle if found
 search('aws_opsworks_app').each do |app|
   if app['name'] == 'Moodle'
@@ -82,4 +85,6 @@ search('aws_opsworks_app').each do |app|
   else
     log('No moodle application found, check app name in opsworks') { level :warn }
   end
+end
+
 end

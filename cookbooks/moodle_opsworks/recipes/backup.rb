@@ -1,3 +1,7 @@
+if Chef::Config[:solo]
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+else
+
 this_instance = search(:aws_opsworks_instance, 'self:true').first
 log(this_instance) { level :warn }
 # Find the first instance with the same layer ID as us
@@ -63,6 +67,8 @@ template '/home/ec2-user/backup-moodledata.sh' do
   )
 end
 
+
+
 if node['end'].nil? || node['env'].downcase != 'dev'
   # choose instance to run backup from
   template '/etc/cron.d/moodlebackup.cron' do
@@ -79,4 +85,6 @@ else
     source 'empty'
   end
   log('Dev Environment detected, not scheduling automatic backups') { level :warn }
+end
+
 end
