@@ -8,7 +8,7 @@ if thisinstance['instanceid'] == firstinstance['instanceid']
 
   template 'config.php' do
     path '/mnt/nfs/moodledata/muc/config.php'
-    source 'config.php.muc.erb'
+    source 'muc.config.php.erb'
     owner 'apache'
     group 'ec2-user'
     mode '0770'
