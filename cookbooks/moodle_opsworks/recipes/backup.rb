@@ -1,6 +1,6 @@
 thisinstance = search(:aws_opsworks_instance, "self:true").first
 log(thisinstance){level :warn}
-#Find the first instance with the same layer ID as us
+# Find the first instance with the same layer ID as us
 firstinstance_in_layer = search(:aws_opsworks_instance, "layer_ids:#{thisinstance['layer_ids'][0]} AND status:online").first
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
 stack = search(:aws_opsworks_stack).first
@@ -61,13 +61,19 @@ template '/home/ec2-user/backup-moodledata.sh' do
 	)
 end
 
-
-# choose instance to run backup from
-template '/etc/cron.d/moodlebackup.cron' do
-    if thisinstance['instanceid'] == firstinstance_in_layer['instanceid']
-        source 'moodlebackup.cron.erb'
-    else
-        source 'empty'
-		log("Backup Was not configured for this instance ensure it is not the primary instance intended for backup"){level :warn}
-    end
+unless note['env'] == "DEV"
+	# choose instance to run backup from
+	template '/etc/cron.d/moodlebackup.cron' do
+    	if thisinstance['instanceid'] == firstinstance_in_layer['instanceid']
+        	source 'moodlebackup.cron.erb'
+    	else
+        	source 'empty'
+			log("Backup Was not configured for this instance ensure it is not the primary instance intended for backup"){level :warn}
+    	end
+	end
+	else
+		template '/etc/cron.d/moodlebackup.cron' do
+    	    	source 'empty'
+		end
+		log("Dev Environment detected, not scheduling automatic backups"){level :warn}
 end
