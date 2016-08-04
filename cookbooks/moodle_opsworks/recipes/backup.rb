@@ -1,7 +1,8 @@
 this_instance = search(:aws_opsworks_instance, 'self:true').first
 log(this_instance) { level :warn }
 # Find the first instance with the same layer ID as us
-first_instance_in_layer = search(:aws_opsworks_instance, "layer_ids:#{this_instance['layer_ids'][0]} AND status:online").first
+first_instance_in_layer = search(:aws_opsworks_instance,
+                                 "layer_ids:#{this_instance['layer_ids'][0]} AND status:online").first
 db = search(:aws_opsworks_rds_db_instance, '*:*').first
 stack = search(:aws_opsworks_stack).first
 moodle_databases = []
@@ -14,29 +15,30 @@ search('aws_opsworks_app').each do |app|
   if app['name'] == 'Moodle'
 
     primary_db = {
-        :backup_bucket => node['S3_backup_bucket'],
-        :stack => stack['name'],
-        :db_host => db['address'],
-        :db_user => db['db_user'],
-        :db_pass => db['db_password'],
-        :db_name => app['data_sources'][0]['database_name'], }
+        backup_bucket: node['S3_backup_bucket'],
+        stack: stack['name'],
+        db_host: db['address'],
+        db_user: db['db_user'],
+        db_pass: db['db_password'],
+        db_name: app['data_sources'][0]['database_name'], }
 
     moodle_databases.push(primary_db)
     unless node['extra_databases'].nil?
       node['extra_databases'].each do |additional_db|
         extra_db = {
-            :backup_bucket => node['S3_backup_bucket'],
-            :stack => stack['name'],
-            :db_host => db['address'],
-            :db_user => db['db_user'],
-            :db_pass => db['db_password'],
-            :db_name => additional_db['name'], }
+            backup_bucket: node['S3_backup_bucket'],
+            stack: stack['name'],
+            db_host: db['address'],
+            db_user: db['db_user'],
+            db_pass: db['db_password'],
+            db_name: additional_db['name'], }
 
         moodle_databases.push(extra_db)
       end
     end
   else
-    log('No moodle application found, check app name in opsworks') { level :warn }
+    message = 'No moodle application found, check app name in opsworks'
+    log(message) { level :warn }
   end
 
 end
@@ -46,7 +48,7 @@ template '/home/ec2-user/backup-moodle-mysql.sh' do
   source 'backup-moodle-mysql.sh'
   owner 'ec2-user'
   mode '0770'
-  variables :moodle_databases => moodle_databases
+  variables moodle_databases: moodle_databases
 end
 
 # create backup script for moodle data folder, will only backup filedir
@@ -55,20 +57,21 @@ template '/home/ec2-user/backup-moodledata.sh' do
   owner 'ec2-user'
   mode '0770'
   variables(
-      :backup_bucket => node['S3_backup_bucket'],
-      :stack => stack['name'],
-      :moodledata_size => node['moodledata_size']
+      backup_bucket: node['S3_backup_bucket'],
+      stack: stack['name'],
+      moodledata_size: node['moodledata_size']
   )
 end
 
-unless node['env'] == 'DEV'
+if node['end'].nil? || node['env'].downcase != 'dev'
   # choose instance to run backup from
   template '/etc/cron.d/moodlebackup.cron' do
     if this_instance['instanceid'] == first_instance_in_layer['instanceid']
       source 'moodlebackup.cron.erb'
     else
       source 'empty'
-      log('Backup Was not configured for this instance ensure it is not the primary instance intended for backup') { level :warn }
+      message = 'Backup Was not configured for this instance ensure, check that this is expected'
+      log(message) { level :warn }
     end
   end
 else

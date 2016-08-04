@@ -17,7 +17,7 @@ link '/var/www/html' do
   to app_path
 end
 
-file "/tmp/#{app['shortname']}" + ".zip" do
+file "/tmp/#{app['shortname']}" + '.zip' do
   action :delete
 end
 

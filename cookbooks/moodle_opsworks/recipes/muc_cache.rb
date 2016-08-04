@@ -1,5 +1,5 @@
-thisinstance = search(:aws_opsworks_instance, "self:true").first
-firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND status:online").first
+thisinstance = search(:aws_opsworks_instance, 'self:true').first
+firstinstance = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
 # TODO check for existance of the moodle data folder and muc cache folder so this can be included  in configure 
 
 

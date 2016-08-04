@@ -11,10 +11,10 @@ template 'opsworks.php' do
   group 'ec2-user'
   mode '0770'
   variables(
-      :db_host => db['address'],
-      :db_user => db['db_user'],
-      :db_pass => db['db_password'],
-      :memcached_ip => memcached['private_ip']
+      db_host: db['address'],
+      db_user: db['db_user'],
+      db_pass: db['db_password'],
+      memcached_ip: memcached['private_ip']
   )
 end
 
@@ -31,10 +31,10 @@ include_recipe "#{cookbook_name}::moodledata"
 
 # manage php settings so we can modify upload limit
 template 'php-5.6.ini' do
-  path "/etc/php-5.6.ini"
-  source "php-5.6.ini"
-  owner "root"
-  group "root"
+  path '/etc/php-5.6.ini'
+  source 'php-5.6.ini'
+  owner 'root'
+  group 'root'
   mode '0644'
 end
 

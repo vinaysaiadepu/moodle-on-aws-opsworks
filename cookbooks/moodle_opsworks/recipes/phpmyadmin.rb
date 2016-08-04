@@ -1,4 +1,4 @@
-db = search(:aws_opsworks_rds_db_instance, "*:*").first
+db = search(:aws_opsworks_rds_db_instance, '*:*').first
 
 packages = [
     'mysql56'

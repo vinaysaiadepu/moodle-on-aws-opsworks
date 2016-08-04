@@ -1,4 +1,4 @@
-thisinstance = search(:aws_opsworks_instance, "self:true").first
+thisinstance = search(:aws_opsworks_instance, 'self:true').first
 stack = search(:aws_opsworks_stack).first
 
 
