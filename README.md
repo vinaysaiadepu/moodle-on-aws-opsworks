@@ -31,4 +31,10 @@ low:
 
 chef-apply whatever.rb
 
-knife search -c /var/chef/runs/71acfdb8-4900-4ec7-98f2-7f3cc17f4cb2/client.rb node 'role:moodle-web-server'
+Find Attributes:
+knife search -c "$(\ls -1dt /var/chef/runs/*/ | head -n 1)client.rb" node 'role:<short name of layer>'
+
+Run a lifecycle event:
+sudo opsworks-agent-cli run_command configure "$(\ls -1dt /var/chef/runs/*/ | head -n 1)attribs.json"
+
+
