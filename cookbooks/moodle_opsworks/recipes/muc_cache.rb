@@ -4,32 +4,32 @@ firstinstance = search(:aws_opsworks_instance, "role:moodle-web-server AND statu
 
 
 # Only first instance works as a memcached host
-	if thisinstance['instanceid'] == firstinstance['instanceid']
+if thisinstance['instanceid'] == firstinstance['instanceid']
 
-		template 'config.php' do
-            path '/mnt/nfs/moodledata/muc/config.php'
-            source 'config.php.muc.erb'
-            owner 'apache'
-            group 'ec2-user'
-            mode '0770'
-            variables(
-                :memcached_ip	=> firstinstance['private_ip']
-            )
-        end
-        
+  template 'config.php' do
+    path '/mnt/nfs/moodledata/muc/config.php'
+    source 'config.php.muc.erb'
+    owner 'apache'
+    group 'ec2-user'
+    mode '0770'
+    variables(
+        :memcached_ip => firstinstance['private_ip']
+    )
+  end
 
-        # setup moodle cache to use memcahced
-        template '/var/www/html/admin/cli/scan_cache.php' do
-            source 'scan_cache.php'
-        end
-        
-        # scan cache afterwards to pickup any changes
-        execute 'apache_configtest' do
-            command 'sudo -u apache /usr/bin/php /var/www/html/admin/cli/scan_cache.php'
-        end
-	else
 
-	end	
+  # setup moodle cache to use memcahced
+  template '/var/www/html/admin/cli/scan_cache.php' do
+    source 'scan_cache.php'
+  end
+
+  # scan cache afterwards to pickup any changes
+  execute 'apache_configtest' do
+    command 'sudo -u apache /usr/bin/php /var/www/html/admin/cli/scan_cache.php'
+  end
+else
+
+end
 
 
 

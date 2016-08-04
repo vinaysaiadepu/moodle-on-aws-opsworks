@@ -23,5 +23,8 @@ cookbooks/moodle_opsworks/cookbooks/*
 
 *.tar.gz
 
+.idea/*
+.idea
+
 
 

@@ -1,13 +1,13 @@
 db = search(:aws_opsworks_rds_db_instance, "*:*").first
 
 packages = [
-	'mysql56'
+    'mysql56'
 ]
 
 packages.each do |pkg|
-	package pkg do
-		action :install
-	end
+  package pkg do
+    action :install
+  end
 end
 
 docker_service 'default' do
