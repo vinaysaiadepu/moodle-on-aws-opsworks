@@ -1,9 +1,7 @@
-
-#allow searching aws stack from attributes file
+# allow searching aws stack from attributes file
 class AttributeSearch
   extend Chef::DSL::DataQuery
 end
-
 
 stack = AttributeSearch.search(:aws_opsworks_stack).first
 
@@ -24,14 +22,12 @@ default['cwlogs']['logfiles']['Site-httpd_error'] = {
 }
 
 override['oh_my_zsh']['users'] = [{
-  :login => 'ec2-user',
-  :theme => 'candy',
-  :plugins => ['git', 'gem', 'docker', 'cp']
-},
-{
-  :login => 'root',
-  :theme => 'af-magic',
-  :plugins => ['git', 'gem', 'docker', 'cp']
-}]
-
-
+                                      :login => 'ec2-user',
+                                      :theme => 'candy',
+                                      :plugins => ['git', 'gem', 'docker', 'cp']
+                                  },
+                                  {
+                                      :login => 'root',
+                                      :theme => 'af-magic',
+                                      :plugins => ['git', 'gem', 'docker', 'cp']
+                                  }]
