@@ -1,3 +1,9 @@
+if Chef::Config[:solo]
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+else
+
+db = search(:aws_opsworks_rds_db_instance, '*:*').first
+
 packages = [
     'mysql56'
 ]
@@ -27,3 +33,4 @@ docker_container 'my_myadmin' do
   env "PMA_HOST=#{db['address']}"
 end
 
+end
