@@ -10,6 +10,7 @@ first_instance_in_layer = search(:aws_opsworks_instance,
 db = search(:aws_opsworks_rds_db_instance, '*:*').first
 stack = search(:aws_opsworks_stack).first
 moodle_databases = []
+s3_bucket = node['S3_backup_bucket']
 
 # Search for a moodle app, we only want to do DB backups if we have an app to backup,
 # also include any extra databases from the stack json in the following format
@@ -19,23 +20,23 @@ search('aws_opsworks_app').each do |app|
   if app['name'] == 'Moodle'
 
     primary_db = {
-        backup_bucket: node['S3_backup_bucket'],
+        backup_bucket: s3_bucket,
         stack: stack['name'],
         db_host: db['address'],
         db_user: db['db_user'],
         db_pass: db['db_password'],
-        db_name: app['data_sources'][0]['database_name'], }
+        db_name: app['data_sources'][0]['database_name'] }
 
     moodle_databases.push(primary_db)
     unless node['extra_databases'].nil?
       node['extra_databases'].each do |additional_db|
         extra_db = {
-            backup_bucket: node['S3_backup_bucket'],
+            backup_bucket: s3_bucket,
             stack: stack['name'],
             db_host: db['address'],
             db_user: db['db_user'],
             db_pass: db['db_password'],
-            db_name: additional_db['name'], }
+            db_name: additional_db['name'] }
 
         moodle_databases.push(extra_db)
       end
@@ -61,8 +62,8 @@ template '/home/ec2-user/backup-moodledata.sh' do
   owner 'ec2-user'
   mode '0770'
   variables(
-      backup_bucket: node['S3_backup_bucket'],
       stack: stack['name'],
+      backup_bucket: s3_bucket,
       moodledata_size: node['moodledata_size']
   )
 end
@@ -76,7 +77,7 @@ if node['end'].nil? || node['env'].downcase != 'dev'
       source 'moodlebackup.cron.erb'
     else
       source 'empty'
-      message = 'Backup Was not configured for this instance ensure, check that this is expected'
+      message = "Backup Was not configured for this instance ensure it is not the primary instance intended for backup"
       log(message) { level :warn }
     end
   end
