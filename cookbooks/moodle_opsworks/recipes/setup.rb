@@ -19,7 +19,7 @@ packages.each do |pkg|
 	end
 end
 
-service "httpd" do
+service 'httpd' do
 	action [:enable, :start]
 end
 

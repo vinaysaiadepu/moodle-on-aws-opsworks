@@ -1,4 +1,8 @@
-db = search(:aws_opsworks_rds_db_instance, "*:*").first
+if Chef::Config[:solo]
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+else
+
+db = search(:aws_opsworks_rds_db_instance, '*:*').first
 
 
 ## TODO, check if db details have changed, most of the time they won't and we can probably ignore removing/recreating the instance
@@ -15,11 +19,11 @@ end
 include_recipe "#{cookbook_name}::moodledata"
 
 execute 'stop all docker containers' do
-  command "docker stop $(docker ps -a -q)"
+  command 'docker stop $(docker ps -a -q)'
 end
 
 execute 'remove all docker containers' do
-  command "docker rm $(docker ps -a -q)"
+  command 'docker rm $(docker ps -a -q)'
 end
 
 # Pull latest image
@@ -34,4 +38,6 @@ docker_container 'my_myadmin' do
   tag 'latest'
   port '80:80'
   env "PMA_HOST=#{db['address']}"
+end
+
 end
