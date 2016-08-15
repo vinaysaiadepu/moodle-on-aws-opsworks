@@ -77,7 +77,7 @@ search('aws_opsworks_app').each do |app|
     # Add PHP file for load balancer check
     template 'aws-up-check.php' do
       path "#{app_path}/aws-up-check.php"
-      source 'aws-up-check.php.erb'
+      source 'aws-up-check.php'
       owner 'apache'
       group 'ec2-user'
       mode '0770'
