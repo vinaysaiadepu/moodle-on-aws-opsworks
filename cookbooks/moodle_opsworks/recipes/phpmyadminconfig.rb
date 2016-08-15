@@ -9,7 +9,7 @@ db = search(:aws_opsworks_rds_db_instance, '*:*').first
 
 # Create and mount Moodledata NFS folder
 directory '/mnt/nfs' do
-  owner 'ec2-user'
+  owner 'apache'
   group 'ec2-user'
   mode '0770'
   action :create

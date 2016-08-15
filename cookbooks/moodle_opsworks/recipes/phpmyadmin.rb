@@ -5,6 +5,7 @@ else
 db = search(:aws_opsworks_rds_db_instance, '*:*').first
 
 packages = [
+    'httpd24',
     'mysql56'
 ]
 
@@ -14,9 +15,17 @@ packages.each do |pkg|
   end
 end
 
+service 'httpd' do
+	action [:stop]
+end
+
 docker_service 'default' do
   action [:create, :start]
 end
+
+
+
+
 
 
 # Pull latest image
