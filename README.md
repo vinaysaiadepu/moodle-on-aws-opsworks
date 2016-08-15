@@ -9,23 +9,25 @@ Attempting to setup Moodle server on Opsworks
 
 This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS regions.
 
-## Setup
+## Build/Package:
+run "berks package" from the cookbooks/moodle_opsworks directory
+
+note: requires berkshelf to be installed, install with the [Chef DK](https://downloads.chef.io/chef-dk/)
+## Setup:
 [Instructions in Wiki](https://github.com/ITMasters/moodle-on-aws-opsworks/wiki/Setup)
 
 ## Todo:
 high:
 - code to check that mount is still right? depends if remounting is working [if File.read(/procsomething).include?(ip:/nfssomething)]
-- improve muc cache recipe so it can be included in run list at setup
 
 med:
 - test kitchen tests
 - add detail to the "Backup Moodledata to S3" section of this doc
-- add instructions for bundling thmes/plugins
 
 low:
 - moodle_web_server: fix deploy script so that it doesn't need to symlink /var/www/html
-- cloudformation script for all this
-- Allow app install from sources other than s3/git
+- cloudformation script for all this (or setup scripts)
+- aws s3 cp end file after the aws s3 sync
 
 ## Notes for playing around with Chef local in SSH on individual machines
 
