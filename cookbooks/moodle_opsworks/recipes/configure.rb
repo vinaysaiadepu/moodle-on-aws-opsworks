@@ -52,11 +52,11 @@ template '/etc/cron.d/minutely-moodle.cron' do
   end
 end
 
-
 # restart httpd to pickup any changes
 service 'httpd' do
   action :restart
 end
 
-end
+include_recipe "#{cookbook_name}::muc_cache"
 
+end

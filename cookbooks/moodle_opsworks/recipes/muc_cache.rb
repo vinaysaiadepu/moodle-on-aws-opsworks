@@ -1,14 +1,20 @@
 if Chef::Config[:solo]
   Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+
+elsif !::File.exists?("/mnt/nfs/moodledata/muc")
+  Chef::Log.warn('Was not able to find moodledata folder to configure the MUC cache')
 else
 
-thisinstance = search(:aws_opsworks_instance, 'self:true').first
-firstinstance = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
+this_instance = search(:aws_opsworks_instance, 'self:true').first
+first_moodle_instance = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
 # TODO check for existance of the moodle data folder and muc cache folder so this can be included  in configure 
 
 
 # Only first instance works as a memcached host
-if thisinstance['instanceid'] == firstinstance['instanceid']
+if this_instance['instanceid'] == first_moodle_instance['instanceid']
+
+  message = 'Starting Configuration of Muc Cache'
+  log(message) { level :info }
 
   template 'config.php' do
     path '/mnt/nfs/moodledata/muc/config.php'
@@ -17,7 +23,7 @@ if thisinstance['instanceid'] == firstinstance['instanceid']
     group 'ec2-user'
     mode '0770'
     variables(
-        :memcached_ip => firstinstance['private_ip']
+        :memcached_ip => first_moodle_instance['private_ip']
     )
   end
 

@@ -4,9 +4,6 @@ else
 
 db = search(:aws_opsworks_rds_db_instance, '*:*').first
 
-
-## TODO, check if db details have changed, most of the time they won't and we can probably ignore removing/recreating the instance
-
 # Create and mount Moodledata NFS folder
 directory '/mnt/nfs' do
   owner 'apache'

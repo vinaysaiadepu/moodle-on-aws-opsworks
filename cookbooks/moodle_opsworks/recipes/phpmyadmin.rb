@@ -24,10 +24,6 @@ docker_service 'default' do
 end
 
 
-
-
-
-
 # Pull latest image
 docker_image 'phpmyadmin/phpmyadmin' do
   tag 'latest'
