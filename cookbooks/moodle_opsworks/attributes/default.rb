@@ -31,3 +31,4 @@ override['oh_my_zsh']['users'] = [{
                                       theme: 'af-magic',
                                       plugins: ['git', 'gem', 'docker', 'cp']
                                   }]
+

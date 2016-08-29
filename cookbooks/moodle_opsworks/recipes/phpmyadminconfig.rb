@@ -15,26 +15,27 @@ end
 
 include_recipe "#{cookbook_name}::moodledata"
 
-execute 'stop all docker containers' do
-  command 'docker stop $(docker ps -a -q)'
+template "/var/www/phpmyadmin/config.inc.php" do
+	source 'config.inc.php.erb'
+	owner user
+	group group
+	mode 00644
+  variables(
+      db_host: db['address'],
+      blowfish_secret: Digest::SHA1.hexdigest(IO.read('/dev/urandom', 2048))
+  )
 end
 
-execute 'remove all docker containers' do
-  command 'docker rm $(docker ps -a -q)'
-end
 
-# Pull latest image
-docker_image 'phpmyadmin/phpmyadmin' do
-  tag 'latest'
-  action :pull
-end
+    directory '/var/www/html' do
+      action :delete
+      not_if { File.symlink?('/var/www/html') }
+      ignore_failure true
+    end
 
-# Run container exposing ports
-docker_container 'my_myadmin' do
-  repo 'phpmyadmin/phpmyadmin'
-  tag 'latest'
-  port '80:80'
-  env "PMA_HOST=#{db['address']}"
-end
+    link '/var/www/html' do
+      to '/var/www/phpmyadmin/'
+    end
+
 
 end
