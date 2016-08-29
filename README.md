@@ -10,7 +10,13 @@
 This requires Amazon EFS (Elastic File System), which is currently only in 3 AWS regions.
 
 ## Build/Package:
-run "berks package" from the cookbooks/moodle_opsworks directory
+
+generate a packaged tar file
+```bash
+git clone https://github.com/ITMasters/moodle-on-aws-opsworks.git
+cd moodle-on-aws-opsworks/cookbooks/moodle_opsworks/
+berks package
+```
 
 note: requires berkshelf to be installed, install with the [Chef DK](https://downloads.chef.io/chef-dk/)
 ## Setup:
