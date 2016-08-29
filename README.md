@@ -3,7 +3,7 @@
 - PHP 5.6
 - Memcached (runs on 1st front-end web server)
 - Amazon RDS (MySQL 5.7)
-- App install from S3 Bucket or Github
+- Moodle install from S3 Bucket or Github (Moodle 2.6 and 3.1 tested, others should be fine)
 - Phymyadmin
 - MoodleData backup to S3
 
@@ -22,6 +22,7 @@ high:
 
 med:
 - test kitchen converge, emulate the opsworks stack
+- Merge the two opsworks layers
 
 low:
 - moodle_web_server: fix deploy script so that it doesn't need to symlink /var/www/html
