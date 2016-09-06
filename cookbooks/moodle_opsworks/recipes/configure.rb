@@ -56,7 +56,7 @@ template '/etc/cron.d/minutely-moodle.cron' do
       cron_cmd: "/usr/bin/php /var/www/html/admin/cli/cron.php"
   )
   else
-  cronCommand = "/usr/bin/curl " + node['cron_url']
+  cronCommand = "/usr/bin/curl \"" + node['cron_url'] + "\""
   variables(
       cron_cmd: cronCommand
   )
