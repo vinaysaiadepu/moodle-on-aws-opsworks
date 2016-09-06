@@ -46,10 +46,22 @@ end
 template '/etc/cron.d/minutely-moodle.cron' do
   # only run cron on the first web server
   if this_instance['instanceid'] == first_instance['instanceid']
+  
     source 'minutely-moodle.cron'
   else
     source 'empty'
   end
+  if node['cron_url'].nil?
+  variables(
+      cron_cmd: "/usr/bin/php /var/www/html/admin/cli/cron.php"
+  )
+  else
+  cronCommand = "/usr/bin/curl \"" + node['cron_url'] + "\""
+  variables(
+      cron_cmd: cronCommand
+  )
+  end
+
 end
 
 # restart httpd to pickup any changes
