@@ -1,2 +1,2 @@
 * * * * * root /usr/bin/php /var/www/html/enrol/database/cli/sync.php
-* * * * * root /usr/bin/php /var/www/html/admin/cli/cron.php
+* * * * * root <%= @cron_cmd %>
