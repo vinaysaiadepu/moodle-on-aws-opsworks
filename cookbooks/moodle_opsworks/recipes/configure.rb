@@ -42,6 +42,22 @@ template 'php-5.6.ini' do
   mode '0644'
 end
 
+template 'empty' do
+  path '/etc/httpd/conf.d/autoindex.conf'
+  source 'empty'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
+template 'httpd.conf' do
+  path '/etc/httpd/conf/httpd.conf'
+  source 'httpd.conf'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
 # setup moodle cron
 template '/etc/cron.d/minutely-moodle.cron' do
   # only run cron on the first web server
