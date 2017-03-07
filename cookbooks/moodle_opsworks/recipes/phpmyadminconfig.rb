@@ -13,7 +13,38 @@ directory '/mnt/nfs' do
   recursive true
 end
 
+include_recipe 's3_file'
 include_recipe "#{cookbook_name}::moodledata"
+
+# use our public and private keys from S3
+aws_s3_file "/etc/pki/tls/certs/server.crt" do
+  bucket "itm-moodle"
+  remote_path "myadmin.crt"
+  mode '0400'
+  owner 'root'
+  group 'root'
+  aws_access_key_id node[:custom_access_key]
+  aws_secret_access_key node[:custom_secret_key]
+end
+
+s3_file "/etc/pki/tls/certs/server.pem" do
+  bucket "itm-moodle"
+  remote_path "myadmin.pem"
+  mode '0400'
+  owner 'root'
+  group 'root'
+  aws_access_key_id node[:custom_access_key]
+  aws_secret_access_key node[:custom_secret_key]
+end
+
+# configure SSL
+template 'ssl.conf' do
+  path '/etc/httpd/conf.d/ssl.conf'
+  source 'ssl.conf'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
 
 template "/var/www/phpmyadmin/config.inc.php" do
 	source 'config.inc.php.erb'
