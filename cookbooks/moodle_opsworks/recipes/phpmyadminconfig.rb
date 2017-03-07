@@ -17,7 +17,7 @@ include_recipe 's3_file'
 include_recipe "#{cookbook_name}::moodledata"
 
 # use our public and private keys from S3
-aws_s3_file "/etc/pki/tls/certs/server.crt" do
+s3_file "/etc/pki/tls/certs/server.crt" do
   bucket "itm-moodle"
   remote_path "myadmin.crt"
   mode '0400'
