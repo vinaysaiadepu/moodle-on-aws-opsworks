@@ -46,15 +46,6 @@ template 'ssl.conf' do
   mode '0644'
 end
 
-# nearly default config, added ssl.conf file
-template 'httpd.conf' do
-  path '/etc/httpd/conf/httpd.conf'
-  source 'httpd.conf'
-  owner 'root'
-  group 'root'
-  mode '0644'
-end
-
 template "/var/www/phpmyadmin/config.inc.php" do
 	source 'config.inc.php.erb'
 	owner user
