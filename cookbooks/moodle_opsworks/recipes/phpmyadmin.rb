@@ -11,7 +11,8 @@ packages = [
 	'php56-mbstring',
 	'php56-pecl-memcached',
 	'mysql56',
-	'mod24_ssl'
+	'mod24_ssl',
+	'mod_proxy'
 ]
 
 packages.each do |pkg|
