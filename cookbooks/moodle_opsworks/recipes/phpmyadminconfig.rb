@@ -27,9 +27,9 @@ s3_file "/etc/pki/tls/certs/server.crt" do
   aws_secret_access_key node[:custom_secret_key]
 end
 
-s3_file "/etc/pki/tls/certs/server.pem" do
+s3_file "/etc/pki/tls/certs/server.key" do
   bucket "itm-moodle"
-  remote_path "myadmin.pem"
+  remote_path "myadmin.key"
   mode '0400'
   owner 'root'
   group 'root'
