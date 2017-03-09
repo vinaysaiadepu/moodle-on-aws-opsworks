@@ -45,12 +45,12 @@ template 'ssl.conf' do
   mode '0644'
 end
 
-template '.htaccess' do
-	path '/var/www/html/.htaccess'
-	source '.htaccess'
-	owner 'root'
-	group 'root'
-	mode '0644'
+template 'httpd.conf' do
+  path '/etc/httpd/conf/httpd.conf'
+  source 'httpd.conf'
+  owner 'root'
+  group 'root'
+  mode '0644'
 end
 
 template "/var/www/phpmyadmin/config.inc.php" do
@@ -64,14 +64,14 @@ template "/var/www/phpmyadmin/config.inc.php" do
   )
 end
 
-    directory '/var/www/html' do
-      action :delete
-      not_if { File.symlink?('/var/www/html') }
-      ignore_failure true
-    end
+directory '/var/www/html' do
+	action :delete
+	not_if { File.symlink?('/var/www/html') }
+	ignore_failure true
+end
 
-    link '/var/www/html' do
-      to '/var/www/phpmyadmin/'
-    end
+link '/var/www/html' do
+	to '/var/www/phpmyadmin/'
+end
 
 end
