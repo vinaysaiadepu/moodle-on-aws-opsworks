@@ -39,7 +39,7 @@ end
 
 template 'ssl-httpd.conf' do
   path '/etc/httpd/conf/httpd.conf'
-  source 'httpd.conf'
+  source 'ssl-httpd.conf'
   owner 'root'
   group 'root'
   mode '0644'
