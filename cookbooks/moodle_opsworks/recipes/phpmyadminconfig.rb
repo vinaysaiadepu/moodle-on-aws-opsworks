@@ -53,11 +53,19 @@ template 'httpd.conf' do
   mode '0644'
 end
 
+template '.htaccess' do
+  path '/var/www/html/.htaccess'
+  source '.htaccess'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
 template "/var/www/phpmyadmin/config.inc.php" do
-	source 'config.inc.php.erb'
-	owner user
-	group group
-	mode 00644
+  source 'config.inc.php.erb'
+  owner user
+  group group
+  mode 00644
   variables(
       db_host: db['address'],
       blowfish_secret: Digest::SHA1.hexdigest(IO.read('/dev/urandom', 2048))
@@ -65,13 +73,13 @@ template "/var/www/phpmyadmin/config.inc.php" do
 end
 
 directory '/var/www/html' do
-	action :delete
-	not_if { File.symlink?('/var/www/html') }
-	ignore_failure true
+  action :delete
+  not_if { File.symlink?('/var/www/html') }
+  ignore_failure true
 end
 
 link '/var/www/html' do
-	to '/var/www/phpmyadmin/'
+  to '/var/www/phpmyadmin/'
 end
 
 end
