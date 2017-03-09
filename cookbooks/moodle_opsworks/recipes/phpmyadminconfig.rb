@@ -37,20 +37,20 @@ s3_file "/etc/pki/tls/certs/server.key" do
   aws_secret_access_key node[:custom_secret_key]
 end
 
-template 'ssl-httpd.conf' do
-  path '/etc/httpd/conf/httpd.conf'
-  source 'ssl-httpd.conf'
-  owner 'root'
-  group 'root'
-  mode '0644'
-end
-
 template 'ssl.conf' do
   path '/etc/httpd/conf.d/ssl.conf'
   source 'ssl.conf'
   owner 'root'
   group 'root'
   mode '0644'
+end
+
+template '.htaccess' do
+	path '/var/www/html/.htaccess'
+	source '.htaccess'
+	owner 'root'
+	group 'root'
+	mode '0644'
 end
 
 template "/var/www/phpmyadmin/config.inc.php" do
@@ -64,7 +64,6 @@ template "/var/www/phpmyadmin/config.inc.php" do
   )
 end
 
-
     directory '/var/www/html' do
       action :delete
       not_if { File.symlink?('/var/www/html') }
@@ -74,6 +73,5 @@ end
     link '/var/www/html' do
       to '/var/www/phpmyadmin/'
     end
-
 
 end
