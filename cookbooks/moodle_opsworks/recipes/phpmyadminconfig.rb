@@ -37,7 +37,14 @@ s3_file "/etc/pki/tls/certs/server.key" do
   aws_secret_access_key node[:custom_secret_key]
 end
 
-# configure SSL
+template 'ssl-httpd.conf' do
+  path '/etc/httpd/conf/httpd.conf'
+  source 'httpd.conf'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
 template 'ssl.conf' do
   path '/etc/httpd/conf.d/ssl.conf'
   source 'ssl.conf'
