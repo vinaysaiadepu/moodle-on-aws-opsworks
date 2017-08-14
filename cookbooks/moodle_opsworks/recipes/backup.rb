@@ -12,6 +12,11 @@ stack = search(:aws_opsworks_stack).first
 moodle_databases = []
 s3_bucket = node['S3_backup_bucket']
 
+is_dev = if node["opsworks"]["stack"]["name"] == 'ITM-Moodle-PROD' then false else true end
+if (is_dev)
+  log("Stack is not named 'ITM-Moodle-PROD', assuming dev, NOT SCHEDULING BACKUPS") { level :warn }
+end
+# ^ This sucks, but there's no easy way to get tags from the instance or anything like that
 # Search for a moodle app, we only want to do DB backups if we have an app to backup,
 # also include any extra databases from the stack json in the following format
 # "extra_databases" : [{"name" : "some_database"}]}
@@ -70,7 +75,7 @@ end
 
 
 
-if node['env'].nil? || node['env'].downcase != 'dev'
+if not is_dev
   # choose instance to run backup from
   template '/etc/cron.d/moodlebackup.cron' do
     if this_instance['instanceid'] == first_instance_in_layer['instanceid']
