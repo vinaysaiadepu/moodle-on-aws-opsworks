@@ -68,13 +68,7 @@ template '/home/ec2-user/backup-moodledata.sh' do
   )
 end
 
-is_dev = if !node.nil? && node["opsworks"]["stack"]["name"] == 'ITM-Moodle-PROD' then false else true end
-if (is_dev)
-  log("Stack is not named 'ITM-Moodle-PROD', assuming dev, NOT SCHEDULING BACKUPS") { level :warn }
-end
-# ^ This sucks, but there's no easy way to get tags from the instance or anything like that
-
-if not is_dev
+if node['env'].nil? || node['env'].downcase != 'dev'
   # choose instance to run backup from
   template '/etc/cron.d/moodlebackup.cron' do
     if this_instance['instanceid'] == first_instance_in_layer['instanceid']

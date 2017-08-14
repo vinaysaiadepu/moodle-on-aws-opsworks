@@ -62,12 +62,6 @@ search('aws_opsworks_app').each do |app|
       to app_path
     end
 
-    is_dev = if !node.nil? && node["opsworks"]["stack"]["name"] == 'ITM-Moodle-PROD' then false else true end
-	if (is_dev)
-	  log("Stack is not named 'ITM-Moodle-PROD', assuming dev, NO EMAILS WILL BE SENT") { level :warn }
-	end
-	# ^ This sucks, but there's no easy way to get tags from the instance or anything like that
-
     # Add Moodle config.php file
     template 'config.php' do
       path "#{app_path}/config.php"
@@ -78,7 +72,7 @@ search('aws_opsworks_app').each do |app|
       variables(
           :db_name => app['data_sources'][0]['database_name'],
           :pw_salt => node['moodle_pw_salt'],
-          no_emails: is_dev
+          no_emails: !(node['env'].nil? || node['env'].downcase != 'dev')
       )
     end
 
