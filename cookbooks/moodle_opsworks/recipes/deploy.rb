@@ -1,6 +1,9 @@
 if Chef::Config[:solo]
   Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
 else
+
+no_emails = if node['env'].downcase != 'dev' then false else true
+
 # Look through opsworks apps and deploy moodle if found
 search('aws_opsworks_app').each do |app|
   if app['name'] == 'Moodle'
@@ -71,7 +74,7 @@ search('aws_opsworks_app').each do |app|
       variables(
           :db_name => app['data_sources'][0]['database_name'],
           :pw_salt => node['moodle_pw_salt'],
-          no_emails:  (if node['env'].downcase != 'dev' then false else true) 
+          no_emails: no_emails
       )
     end
 
