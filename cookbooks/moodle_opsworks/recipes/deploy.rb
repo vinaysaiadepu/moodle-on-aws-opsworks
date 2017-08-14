@@ -2,12 +2,6 @@ if Chef::Config[:solo]
   Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
 else
 
-is_dev = if node["opsworks"]["stack"]["name"] == 'ITM-Moodle-PROD' then false else true end
-if (is_dev)
-  log("Stack is not named 'ITM-Moodle-PROD', assuming dev, NO EMAILS WILL BE SENT") { level :warn }
-end
-# ^ This sucks, but there's no easy way to get tags from the instance or anything like that
-
 # Look through opsworks apps and deploy moodle if found
 search('aws_opsworks_app').each do |app|
   if app['name'] == 'Moodle'
@@ -67,6 +61,13 @@ search('aws_opsworks_app').each do |app|
     link '/var/www/html' do
       to app_path
     end
+
+    is_dev = if !node.nil? && node["opsworks"]["stack"]["name"] == 'ITM-Moodle-PROD' then false else true end
+	if (is_dev)
+	  log("Stack is not named 'ITM-Moodle-PROD', assuming dev, NO EMAILS WILL BE SENT") { level :warn }
+	end
+	# ^ This sucks, but there's no easy way to get tags from the instance or anything like that
+
     # Add Moodle config.php file
     template 'config.php' do
       path "#{app_path}/config.php"
