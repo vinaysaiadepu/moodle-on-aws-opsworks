@@ -61,7 +61,7 @@ search('aws_opsworks_app').each do |app|
     link '/var/www/html' do
       to app_path
     end
-
+    log('node[env] = ' + node['env']) { level :warn }
     # Add Moodle config.php file
     template 'config.php' do
       path "#{app_path}/config.php"
