@@ -62,7 +62,6 @@ end
 template '/etc/cron.d/minutely-moodle.cron' do
   # only run cron on the first web server
   if this_instance['instanceid'] == first_instance['instanceid']
-  
     source 'minutely-moodle.cron'
   else
     source 'empty'

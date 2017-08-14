@@ -1,2 +1,8 @@
-15 * * * * ec2-user /bin/bash /home/ec2-user/backup-moodledata.sh
-30 */6 * * * ec2-user /bin/bash /home/ec2-user/backup-moodle-mysql.sh
+0 0 * * * * ec2-user /bin/bash /home/ec2-user/backup-moodledata.sh daily
+15 0 * * * * ec2-user /bin/bash /home/ec2-user/backup-moodle-mysql.sh daily
+0 1 * * * 1 ec2-user /bin/bash /home/ec2-user/backup-moodledata.sh weekly
+15 1 * * * 1 ec2-user /bin/bash /home/ec2-user/backup-moodle-mysql.sh weekly
+0 2 1 * * * ec2-user /bin/bash /home/ec2-user/backup-moodledata.sh monthly
+15 2 1 * * * ec2-user /bin/bash /home/ec2-user/backup-moodle-mysql.sh monthly
+0 3 1 1 * * ec2-user /bin/bash /home/ec2-user/backup-moodledata.sh yearly
+15 3 1 1 * * ec2-user /bin/bash /home/ec2-user/backup-moodle-mysql.sh yearly

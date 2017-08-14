@@ -33,6 +33,8 @@ $CFG->admin     = 'admin';
 
 $CFG->passwordsaltmain    = '<%= @pw_salt %>';
 
+$CFG->noemailever = '<%= @no_emails %>';
+
 $CFG->session_handler_class = '\core\session\memcached';
 $CFG->session_memcached_save_path = $ops->memcached_ip . ':11212';
 $CFG->session_memcached_prefix = 'memc.sess.key.';

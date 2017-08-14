@@ -5,8 +5,8 @@
     if test `find "/mnt/nfs/<%= db[:db_name] %>.sql" -mmin -60`
     then
         /bin/nice -n 15 tar -zcf /mnt/nfs/<%= db[:db_name] %>.tgz /mnt/nfs/<%= db[:db_name] %>.sql
-        /bin/nice -n 15 aws s3 cp /mnt/nfs/<%= db[:db_name] %>.tgz s3://<%= db[:backup_bucket] %>/<%= db[:stack] %>/
-        echo "Compress & Upload finished for <%= db[:db_name] %>"
+        /bin/nice -n 15 aws s3 cp /mnt/nfs/<%= db[:db_name] %>.tgz s3://<%= db[:backup_bucket] %>/<%= db[:stack] %>/$1
+        echo "Compress & Upload finished for <%= db[:db_name] %> $1"
     else
         echo "Mysql Dump for <%= db[:db_name] %> has likely failed as <%= db[:db_name] %>.sql is older than 60 minutes"
     fi
