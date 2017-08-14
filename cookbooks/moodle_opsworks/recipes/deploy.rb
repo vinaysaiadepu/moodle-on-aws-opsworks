@@ -71,8 +71,7 @@ search('aws_opsworks_app').each do |app|
       mode '0770'
       variables(
           :db_name => app['data_sources'][0]['database_name'],
-          :pw_salt => node['moodle_pw_salt'],
-          no_emails: !(node['env'].nil? || node['env'].downcase != 'dev')
+          :pw_salt => node['moodle_pw_salt']
       )
     end
 
