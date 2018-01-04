@@ -7,6 +7,8 @@ this_instance = search(:aws_opsworks_instance, 'self:true').first
 memcached = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
 first_instance = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
 
+first_instance2 = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
+
 # Add /srv/opsworks.php file - stores info that Moodle needs to know about other AWS resources
 template 'opsworks.php' do
   path '/srv/opsworks.php'
@@ -61,7 +63,7 @@ end
 # setup moodle cron
 template '/etc/cron.d/minutely-moodle.cron' do
   # only run cron on the first web server
-  if this_instance['instanceid'] == first_instance['instanceid']
+  if this_instance['instance_id'] == first_instance['instance_id']
     source 'minutely-moodle.cron'
   else
     source 'empty'
