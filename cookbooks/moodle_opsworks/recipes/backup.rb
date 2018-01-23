@@ -70,7 +70,7 @@ end
 if node['env'].nil? || node['env'].downcase != 'dev'
   # choose instance to run backup from
   template '/etc/cron.d/moodlebackup.cron' do
-    if this_instance['instanceid'] == first_instance_in_layer['instanceid']
+    if this_instance['instance_id'] == first_instance_in_layer['instance_id']
       source 'moodlebackup.cron.erb'
     else
       source 'empty'
