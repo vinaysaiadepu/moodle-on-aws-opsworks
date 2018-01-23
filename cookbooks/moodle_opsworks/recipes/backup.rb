@@ -74,8 +74,6 @@ if node['env'].nil? || node['env'].downcase != 'dev'
       source 'moodlebackup.cron.erb'
     else
       source 'empty'
-      message = "Backup Was not configured for this instance ensure it is not the primary instance intended for backup"
-      log(message) { level :warn }
     end
   end
 else
