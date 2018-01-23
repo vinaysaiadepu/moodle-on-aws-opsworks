@@ -1,7 +1,7 @@
 #!/bin/bash
 
 <% @moodle_databases.each do |db| %>
-	echo "$(date)" > /mnt/nfs/dbstart
+	echo "$(date +"%s")" > /mnt/nfs/dbstart
 	/bin/nice -n 15 mysqldump -u <%= db[:db_user] %> -p<%= db[:db_pass] %> -h <%= db[:db_host] %> --single-transaction <%= db[:db_name] %> > /mnt/nfs/<%= db[:db_name] %>.sql
 	if test `find "/mnt/nfs/<%= db[:db_name] %>.sql" -mmin -60`
 	then
@@ -11,8 +11,8 @@
 			/bin/nice -n 15 aws s3 cp /mnt/nfs/<%= db[:db_name] %>.tgz s3://<%= db[:backup_bucket] %>/<%= db[:stack] %>/$1/<%= db[:db_name] %>.tgz --storage-class STANDARD_IA
 			if [ $? -eq 0 ]; then
 				echo "Upload finished for <%= db[:db_name] %> $1"
-				echo "$(date)" > /mnt/nfs/dbend
-				aws s3 cp /mnt/nfs/dbend s3://<%= @backup_bucket %>/<%= @stack %>/$1/dbend
+				echo "$(date +"%s")" > /mnt/nfs/dbend
+				aws s3 cp /mnt/nfs/dbend s3://<%= @backup_bucket %>/<%= @stack %>/$1/dbend --acl public-read
 			else
 				echo "Upload failed for <%= db[:db_name] %> $1"
 			fi
