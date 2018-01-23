@@ -5,8 +5,7 @@ else
 this_instance = search(:aws_opsworks_instance, 'self:true').first
 log(this_instance) { level :warn }
 # Find the first instance with the same layer ID as us
-first_instance_in_layer = search(:aws_opsworks_instance,
-                                 "layer_ids:#{this_instance['layer_ids'][0]} AND status:online").first
+first_instance = search(:aws_opsworks_instance, 'role:moodle-web-server AND status:online').first
 db = search(:aws_opsworks_rds_db_instance, '*:*').first
 stack = search(:aws_opsworks_stack).first
 moodle_databases = []
